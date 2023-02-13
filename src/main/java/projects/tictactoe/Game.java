@@ -44,7 +44,12 @@ public class Game {
     private String grid;
     private char[][] matrix = new char[3][3];
 
-    private char player = 'X';
+    private char player = 'X';  // !
+
+    // !
+    public Game() {
+        this("_________");
+    }
 
     public Game(String grid) {
         this.grid = grid;
@@ -181,9 +186,10 @@ public class Game {
         StringBuilder gridBuilder = new StringBuilder(this.grid);
         gridBuilder.setCharAt(flatIndex, player);
         this.grid = gridBuilder.toString();
-        togglePlayer();
+        togglePlayer(); // !
     }
 
+    // !
     private void togglePlayer() {
         player = (player == 'X') ? 'O' : 'X';
     }

@@ -8,12 +8,12 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
 
-        Game game = new Game(scanner.next());
+        Game game = new Game();   // !
         game.printGrid();
 
         Game.UpdateResult updateResult;
 
-        while (game.evalGameState() != Game.State.NOT_FINISHED) {
+        while (game.evalGameState() == Game.State.NOT_FINISHED) { // !
             try {
                 int xInput = scanner.nextInt();
                 int yInput = scanner.nextInt();
@@ -21,7 +21,7 @@ public class Main {
                 if (updateResult != Game.UpdateResult.SUCCESS) {
                     System.out.println(updateResult.getErrorMessage());
                 } else {
-                    game.printGrid();
+                    game.printGrid(); // !
                 }
             } catch (InputMismatchException ex) {
                 System.out.println(Game.UpdateResult.INVALID_INPUT.getErrorMessage());
@@ -29,6 +29,6 @@ public class Main {
             }
         }
 
-        System.out.println(game.evalGameState().getDescription());
+        System.out.println(game.evalGameState().getDescription()); // !
     }
 }
