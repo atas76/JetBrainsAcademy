@@ -14,12 +14,10 @@ public class Cinema {
 
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Enter number of rows: ");
-        System.out.print("> ");
+        System.out.println("Enter the number of rows: ");
         rows = scanner.nextInt();
 
-        System.out.println("Enter number of columns: ");
-        System.out.print("> ");
+        System.out.println("Enter the number of seats in each row: ");
         cols = scanner.nextInt();
 
         System.out.println("Total income: ");
