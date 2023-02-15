@@ -2,11 +2,8 @@ package projects.cinema;
 
 public class CinemaRoom {
 
-    private final static int ROWS = 7;
-    private final static int COLS = 8;
-
-    private int rows = ROWS;
-    private int cols = COLS;
+    private int rows;
+    private int cols;
 
     enum Seat {
         AVAILABLE("S"), OCCUPIED("B");
@@ -23,13 +20,14 @@ public class CinemaRoom {
         }
     }
 
-    private Seat[][] seatArrangement = new Seat[rows][cols];
+    private Seat[][] seatArrangement;
 
     public CinemaRoom(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
-        for (int i = 0; i < ROWS; i++) {
-            for (int j = 0; j < COLS; j++) {
+        this.seatArrangement = new Seat[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
                 seatArrangement[i][j] = Seat.AVAILABLE;
             }
         }
@@ -40,13 +38,15 @@ public class CinemaRoom {
     }
 
     public void displaySeats() {
-        System.out.print("""
-                          Cinema:
-                            1 2 3 4 5 6 7 8
-                           """);
-        for (int i = 1; i <= ROWS; i++) {
+        System.out.println("Cinema: ");
+        System.out.print(" ");
+        for (int i = 0; i < rows; i++) {
+            System.out.print(" " + (i + 1));
+        }
+        System.out.println();
+        for (int i = 1; i <= rows; i++) {
             System.out.print(i);
-            for (int j = 1; j <= COLS; j++) {
+            for (int j = 1; j <= cols; j++) {
                 System.out.print(" " + seatArrangement[i - 1][j - 1]);
             }
             System.out.println();
