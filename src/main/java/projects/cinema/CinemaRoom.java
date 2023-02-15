@@ -40,7 +40,7 @@ public class CinemaRoom {
     public void displaySeats() {
         System.out.println("Cinema: ");
         System.out.print(" ");
-        for (int i = 0; i < rows; i++) {
+        for (int i = 0; i < cols; i++) {
             System.out.print(" " + (i + 1));
         }
         System.out.println();
