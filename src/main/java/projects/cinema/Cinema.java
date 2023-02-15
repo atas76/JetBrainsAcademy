@@ -4,38 +4,33 @@ import java.util.Scanner;
 
 public class Cinema {
 
-    private final static int ROWS = 7;
-    private final static int COLS = 8;
-
-    private static int rows = ROWS;
-    private static int cols = COLS;
-
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Enter the number of rows: ");
-        rows = scanner.nextInt();
+        int rows = scanner.nextInt();
 
         System.out.println("Enter the number of seats in each row: ");
-        cols = scanner.nextInt();
+        int cols = scanner.nextInt();
 
-        System.out.println("Total income: ");
-        System.out.println("$" + new RevenueCalculator(rows, cols).doCalculate());
+        CinemaRoom cinemaRoom = new CinemaRoom(rows, cols);
+        cinemaRoom.displaySeats();
+
+        System.out.println("Enter a row number:");
+        int rowNum = scanner.nextInt();
+
+        System.out.println("Enter a seat number in that row:");
+        int seatNum = scanner.nextInt();
+
+        System.out.println("Ticket price: $" + new PriceCalculator(rowNum, rows, cols).doCalculate());
+
+        cinemaRoom.book(rowNum, seatNum);
+        cinemaRoom.displaySeats();
     }
 
-    private static void displayLayout() {
-        // Write your code here
-        System.out.print("""
-                          Cinema:
-                            1 2 3 4 5 6 7 8
-                           """);
-        for (int i = 1; i <= ROWS; i++) {
-            System.out.print(i);
-            for (int j = 1; j <= COLS; j++) {
-                System.out.print(" S");
-            }
-            System.out.println();
-        }
+    private static void displayIncome(int rows, int cols) {
+        System.out.println("Total income: ");
+        System.out.println("$" + new RevenueCalculator(rows, cols).doCalculate());
     }
 }

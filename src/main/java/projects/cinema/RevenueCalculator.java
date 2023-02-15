@@ -5,10 +5,10 @@ public class RevenueCalculator {
     private int rows;
     private int cols;
 
-    private final static int CAPACITY_THRESHOLD = 60;
-    private final static int SMALL_ROOM_PRICE = 10;
-    private final static int FRONT_SEATS_PRICE = 10;
-    private final static int BACK_SEATS_PRICE = 8;
+    final static int CAPACITY_THRESHOLD = 60;
+    final static int SMALL_ROOM_PRICE = 10;
+    final static int FRONT_SEATS_PRICE = 10;
+    final static int BACK_SEATS_PRICE = 8;
 
     public RevenueCalculator(int rows, int cols) {
         this.rows = rows;
