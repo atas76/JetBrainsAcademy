@@ -15,18 +15,36 @@ public class Cinema {
         int cols = scanner.nextInt();
 
         CinemaRoom cinemaRoom = new CinemaRoom(rows, cols);
-        cinemaRoom.displaySeats();
 
-        System.out.println("Enter a row number:");
-        int rowNum = scanner.nextInt();
+        int menuChoice = -1;
 
-        System.out.println("Enter a seat number in that row:");
-        int seatNum = scanner.nextInt();
+        while (menuChoice != 0) {
+            System.out.print("""
+                1. Show the seats
+                2. Buy a ticket
+                0. Exit
+                """);
+            menuChoice = scanner.nextInt();
 
-        System.out.println("Ticket price: $" + new PriceCalculator(rowNum, rows, cols).doCalculate());
+            switch (menuChoice) {
+                case 1 -> {
+                    cinemaRoom.displaySeats();
+                    System.out.println();
+                }
+                case 2 -> {
+                    System.out.println("Enter a row number:");
+                    int rowNum = scanner.nextInt();
 
-        cinemaRoom.book(rowNum, seatNum);
-        cinemaRoom.displaySeats();
+                    System.out.println("Enter a seat number in that row:");
+                    int seatNum = scanner.nextInt();
+
+                    System.out.println("Ticket price: $" + new PriceCalculator(rowNum, rows, cols).doCalculate());
+                    System.out.println();
+
+                    cinemaRoom.book(rowNum, seatNum);
+                }
+            }
+        }
     }
 
     private static void displayIncome(int rows, int cols) {
