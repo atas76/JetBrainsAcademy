@@ -51,9 +51,13 @@ public class Cinema {
                         continue;
                     };
 
-                    if (!cinemaRoom.book(rowNum, seatNum)) {
+                    while (!cinemaRoom.book(rowNum, seatNum)) {
                         System.out.println(TICKET_ALREADY_PURCHASED);
-                        continue;
+                        System.out.println("Enter a row number:");
+                        rowNum = scanner.nextInt();
+
+                        System.out.println("Enter a seat number in that row:");
+                        seatNum = scanner.nextInt();
                     };
 
                     int ticketPrice = new PriceCalculator(rowNum, rows, cols).doCalculate();
