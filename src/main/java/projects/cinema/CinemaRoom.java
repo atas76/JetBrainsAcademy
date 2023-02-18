@@ -33,8 +33,16 @@ public class CinemaRoom {
         }
     }
 
-    public void book(int row, int seat) {
-        seatArrangement[row - 1][seat - 1] = Seat.OCCUPIED;
+    public boolean isInputValid(int row, int seat) {
+        return row <= rows && seat <= cols && row > 0 && seat > 0;
+    }
+
+    public boolean book(int row, int seatNumber) {
+        if (seatArrangement[row - 1][seatNumber - 1] == Seat.OCCUPIED) {
+            return false;
+        }
+        seatArrangement[row - 1][seatNumber - 1] = Seat.OCCUPIED;
+        return true;
     }
 
     public void displaySeats() {
