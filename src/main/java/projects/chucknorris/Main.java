@@ -10,9 +10,9 @@ public class Main {
 
         System.out.println("Input string:");
         String input = scanner.nextLine();
-        String binaryString = getBinaryString(input);
 
         System.out.println("The result:");
+        System.out.println(getChuckNorrisUnaryCode(input));
     }
 
     static String getChuckNorrisUnaryCode(String inputString) {
