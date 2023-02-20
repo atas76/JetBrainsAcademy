@@ -24,7 +24,7 @@ class MainTest {
 
     @Test
     public void testEncodeExclamationMark() {
-        assertEquals("00 0 0 0 00 0000", Main.getChuckNorrisUnaryCode("!"));
+        assertEquals("00 0 0 0 00 0000 0 0", Main.getChuckNorrisUnaryCode("!"));
     }
 
     @Test

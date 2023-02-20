@@ -30,7 +30,7 @@ public class Main {
                 if (index > binaryString.length() - 1) break;
             }
             sb.append(encode(currentBit, currentSequenceCount));
-            if (index >= binaryString.length() - 1) break;
+            if (index > binaryString.length() - 1) break;
             sb.append(" ");
             currentBit = binaryString.charAt(index);
             currentSequenceCount = 0;
