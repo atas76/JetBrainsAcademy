@@ -11,6 +11,7 @@ public class Main {
         System.out.println("Input string:");
         String input = scanner.nextLine();
 
+        System.out.println("The result:");
         input.chars().forEach(ch -> System.out.println((char) ch + " = " +
                 String.format("%7s", Integer.toBinaryString(ch)).replace(' ', '0')));
     }
