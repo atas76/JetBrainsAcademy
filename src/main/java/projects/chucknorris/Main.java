@@ -23,14 +23,14 @@ public class Main {
         int index = 0;
         StringBuilder sb = new StringBuilder();
 
-        while (index < binaryString.length() - 1) {
+        while (true) {
             while (binaryString.charAt(index) == currentBit) {
                 ++currentSequenceCount;
                 ++index;
                 if (index > binaryString.length() - 1) break;
             }
             sb.append(encode(currentBit, currentSequenceCount));
-            if (index > binaryString.length() - 1) break;
+            if (index >= binaryString.length() - 1) break;
             sb.append(" ");
             currentBit = binaryString.charAt(index);
             currentSequenceCount = 0;
