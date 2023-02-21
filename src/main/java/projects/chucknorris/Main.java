@@ -8,14 +8,40 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Input string:");
+        System.out.println("Input encoded string:");
         String input = scanner.nextLine();
 
         System.out.println("The result:");
-        System.out.println(getChuckNorrisUnaryCode(input));
+        System.out.println(decode(input));
     }
 
-    static String getChuckNorrisUnaryCode(String inputString) {
+    static String decode(String encodedString) {
+
+        StringBuilder decodedStringBuilder = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
+        String [] blocks = encodedString.split("\s");
+        char currentBit;
+        for (int i = 0; i < blocks.length; i += 2) {
+            if (blocks[i].length() == 1) {
+                currentBit = '1';
+            } else {
+                currentBit = '0';
+            }
+            for (int j = 0; j < blocks[i + 1].length(); j++) {
+                sb.append(currentBit);
+            }
+        }
+
+        for (int i = 0; i < sb.length(); i += 7) {
+            String currentBlock = sb.substring(i, i + 7);
+            char currentChar = (char) Integer.parseInt(currentBlock, 2);
+            decodedStringBuilder.append(currentChar);
+        }
+
+        return decodedStringBuilder.toString();
+    }
+
+    static String encode(String inputString) {
 
         String binaryString = getBinaryString(inputString);
         char currentBit = binaryString.charAt(0);
@@ -29,7 +55,7 @@ public class Main {
                 ++index;
                 if (index > binaryString.length() - 1) break;
             }
-            sb.append(encode(currentBit, currentSequenceCount));
+            sb.append(encodeSequence(currentBit, currentSequenceCount));
             if (index > binaryString.length() - 1) break;
             sb.append(" ");
             currentBit = binaryString.charAt(index);
@@ -38,7 +64,7 @@ public class Main {
         return sb.toString();
     }
 
-    static String encode(char bit, int sequenceCount) {
+    static String encodeSequence(char bit, int sequenceCount) {
 
         StringBuilder sb = new StringBuilder();
 
