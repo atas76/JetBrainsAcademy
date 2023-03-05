@@ -8,11 +8,67 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Input encoded string:");
-        String input = scanner.nextLine();
+        String operation;
 
-        System.out.println("The result:");
-        System.out.println(decode(input));
+        do {
+
+            System.out.println("Please input operation (encode/decode/exit):");
+            operation = scanner.nextLine();
+            String input;
+
+            if ("encode".equals(operation)) {
+                System.out.println("Input string: ");
+                input = scanner.nextLine();
+                System.out.println("Encoded string:");
+                System.out.println(encode(input));
+            } else if ("decode".equals(operation)) {
+                System.out.println("Input encoded string:");
+                input = scanner.nextLine();
+                if (!isValid(input)) {
+                    System.out.println("Encoded string is not valid.");
+                    continue;
+                }
+                System.out.println("Decoded string:");
+                System.out.println(decode(input));
+            } else if(!"exit".equals(operation)) {
+                System.out.println("There is no '" + operation + "' operation");
+            }
+        } while (!"exit".equals(operation));
+
+        System.out.println("Bye!");
+    }
+
+    static boolean isValid(String encodedString) {
+        return hasValidCharacters(encodedString) &&
+                hasValidStructure(encodedString);
+    }
+
+    static boolean hasValidStructure(String encodedString) {
+        String [] blocks = encodedString.split("\s");
+        if (blocks.length % 2 == 1) {
+            return false;
+        }
+        char currentBit;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < blocks.length; i += 2) {
+            if (!"0".equals(blocks[i]) && !"00".equals(blocks[i])) {
+                return false;
+            }
+            if (blocks[i].length() == 1) {
+                currentBit = '1';
+            } else {
+                currentBit = '0';
+            }
+            for (int j = 0; j < blocks[i + 1].length(); j++) {
+                sb.append(currentBit);
+            }
+        }
+
+        return sb.length() % 7 == 0;
+    }
+
+    static boolean hasValidCharacters(String encodedSting) {
+        return encodedSting.chars().allMatch(ch -> ch == '0' || ch == ' ');
     }
 
     static String decode(String encodedString) {
