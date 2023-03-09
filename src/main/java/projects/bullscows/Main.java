@@ -1,6 +1,5 @@
 package projects.bullscows;
 
-import java.util.Collections;
 import java.util.Scanner;
 
 public class Main {
@@ -10,20 +9,29 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
-        StringBuilder code = new StringBuilder(10);
+        StringBuilder secretNumber = new StringBuilder(10);
 
         int numberOfDigits = scanner.nextInt();
 
         if (numberOfDigits <= 10) {
-            while (code.length() < numberOfDigits) {
+            while (secretNumber.length() < numberOfDigits) {
                 long pseudoRandomNumber = System.nanoTime();
                 String pseudoRandomNumberStr = String.valueOf(pseudoRandomNumber);
-                pseudoRandomNumberStr.chars()
-                        .mapToObj(i -> (char) i)
-                        .sorted(Collections.reverseOrder()).limit(numberOfDigits - code.length())
-                        .forEach(code::append);
+
+                System.out.println(pseudoRandomNumberStr);
+
+                for (int i = pseudoRandomNumberStr.length() - 1; i >= 0; i--) {
+                    char currentChar = pseudoRandomNumberStr.charAt(i);
+                    if (currentChar == '0' && secretNumber.isEmpty()) continue;
+                    if (!secretNumber.toString().contains(Character.toString(currentChar))) {
+                        secretNumber.append(currentChar);
+                    }
+                    if (secretNumber.length() == numberOfDigits) break;
+                }
+
+                System.out.println("Secret number: " + secretNumber);
             }
-            System.out.println("The random secret number is " + code);
+            System.out.println("The random secret number is " + secretNumber);
         } else {
             System.out.println("Error: can't generate a secret number with a length of " + numberOfDigits
                     + " because there aren't enough unique digits.");
