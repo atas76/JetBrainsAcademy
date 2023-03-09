@@ -1,5 +1,6 @@
 package projects.bullscows;
 
+import java.util.Collections;
 import java.util.Scanner;
 
 public class Main {
@@ -9,10 +10,28 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
+        StringBuilder code = new StringBuilder(10);
 
-        code = String.valueOf(9305);
+        int numberOfDigits = scanner.nextInt();
 
-        System.out.println("Grade: " + computeGrade(scanner.next()) + ". The secret code is " + code);
+        if (numberOfDigits <= 10) {
+            while (code.length() < numberOfDigits) {
+                long pseudoRandomNumber = System.nanoTime();
+                String pseudoRandomNumberStr = String.valueOf(pseudoRandomNumber);
+                pseudoRandomNumberStr.chars()
+                        .mapToObj(i -> (char) i)
+                        .sorted(Collections.reverseOrder()).limit(numberOfDigits - code.length())
+                        .forEach(code::append);
+            }
+            System.out.println("The random secret number is " + code);
+        } else {
+            System.out.println("Error: can't generate a secret number with a length of " + numberOfDigits
+                    + " because there aren't enough unique digits.");
+        }
+
+        // Stage 2
+        // code = String.valueOf(9305);
+        // System.out.println("Grade: " + computeGrade(scanner.next()) + ". The secret code is " + code);
     }
 
     private static void gameFlowPrototype() {
