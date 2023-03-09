@@ -18,8 +18,6 @@ public class Main {
                 long pseudoRandomNumber = System.nanoTime();
                 String pseudoRandomNumberStr = String.valueOf(pseudoRandomNumber);
 
-                System.out.println(pseudoRandomNumberStr);
-
                 for (int i = pseudoRandomNumberStr.length() - 1; i >= 0; i--) {
                     char currentChar = pseudoRandomNumberStr.charAt(i);
                     if (currentChar == '0' && secretNumber.isEmpty()) continue;
@@ -28,8 +26,6 @@ public class Main {
                     }
                     if (secretNumber.length() == numberOfDigits) break;
                 }
-
-                System.out.println("Secret number: " + secretNumber);
             }
             System.out.println("The random secret number is " + secretNumber);
         } else {
