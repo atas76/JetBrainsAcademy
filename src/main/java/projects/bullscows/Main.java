@@ -1,13 +1,21 @@
 package projects.bullscows;
 
+import java.util.Scanner;
+
 public class Main {
 
     private static String code;
 
     public static void main(String[] args) {
 
-        code = String.valueOf(9876);
+        Scanner scanner = new Scanner(System.in);
 
+        code = String.valueOf(9305);
+
+        System.out.println("Grade: " + computeGrade(scanner.next()) + ". The secret code is " + code);
+    }
+
+    private static void gameFlowPrototype() {
         System.out.println("The secret code is prepared: ****.");
         System.out.println();
         playTurn("1234", 1);
@@ -44,18 +52,18 @@ public class Main {
     private static String getGradePresentation(int bulls, int cows) {
         StringBuilder sb = new StringBuilder();
         if (bulls == 1) {
-            sb.append("1 bull");
+            sb.append("1 bull(s)");
         } else if (bulls > 1) {
-            sb.append(bulls).append(" bulls");
+            sb.append(bulls).append(" bull(s)");
         }
         if (cows > 0) {
             if (bulls > 0) {
                 sb.append(" and ");
             }
             if (cows == 1) {
-                sb.append("1 cow");
+                sb.append("1 cow(s)");
             } else {
-                sb.append(cows).append(" cows");
+                sb.append(cows).append(" cow(s)");
             }
         }
         if (bulls == 0 && cows == 0) {
