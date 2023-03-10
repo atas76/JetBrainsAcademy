@@ -4,38 +4,53 @@ import java.util.Scanner;
 
 public class Main {
 
-    private static String code;
+    private static String secretCode;
 
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
-        StringBuilder secretNumber = new StringBuilder(10);
 
-        int numberOfDigits = scanner.nextInt();
+        System.out.println("Please, enter the secret code's length:");
+        int codeDigitsNum = scanner.nextInt();
+        System.out.println("Okay, let's start a game!");
 
-        if (numberOfDigits <= 10) {
-            while (secretNumber.length() < numberOfDigits) {
-                long pseudoRandomNumber = System.nanoTime();
-                String pseudoRandomNumberStr = String.valueOf(pseudoRandomNumber);
-
-                for (int i = pseudoRandomNumberStr.length() - 1; i >= 0; i--) {
-                    char currentChar = pseudoRandomNumberStr.charAt(i);
-                    if (currentChar == '0' && secretNumber.isEmpty()) continue;
-                    if (!secretNumber.toString().contains(Character.toString(currentChar))) {
-                        secretNumber.append(currentChar);
-                    }
-                    if (secretNumber.length() == numberOfDigits) break;
-                }
-            }
-            System.out.println("The random secret number is " + secretNumber);
+        if (codeDigitsNum <= 10) {
+            secretCode = generateSecretCode(codeDigitsNum);
+            // System.out.println("The random secret number is " + secretCode);
         } else {
-            System.out.println("Error: can't generate a secret number with a length of " + numberOfDigits
+            System.out.println("Error: can't generate a secret number with a length of " + codeDigitsNum
                     + " because there aren't enough unique digits.");
         }
+        int turn = 1;
+        boolean guessed = false;
 
-        // Stage 2
-        // code = String.valueOf(9305);
-        // System.out.println("Grade: " + computeGrade(scanner.next()) + ". The secret code is " + code);
+        while (!guessed) {
+            System.out.println("Turn " + turn++ + ":");
+            guessed = playTurn(scanner.next());
+            if (guessed) {
+                System.out.println("Congratulations! You guessed the secret code.");
+            }
+        }
+    }
+
+    private static String generateSecretCode(int codeDigitsNum) {
+
+        StringBuilder secretNumberBuilder = new StringBuilder(10);
+
+        while (secretNumberBuilder.length() < codeDigitsNum) {
+            long pseudoRandomNumber = System.nanoTime();
+            String pseudoRandomNumberStr = String.valueOf(pseudoRandomNumber);
+
+            for (int i = pseudoRandomNumberStr.length() - 1; i >= 0; i--) {
+                char currentChar = pseudoRandomNumberStr.charAt(i);
+                if (currentChar == '0' && secretNumberBuilder.isEmpty()) continue;
+                if (!secretNumberBuilder.toString().contains(Character.toString(currentChar))) {
+                    secretNumberBuilder.append(currentChar);
+                }
+                if (secretNumberBuilder.length() == codeDigitsNum) break;
+            }
+        }
+        return secretNumberBuilder.toString();
     }
 
     private static void gameFlowPrototype() {
@@ -45,7 +60,13 @@ public class Main {
         System.out.println();
         boolean correctResult = playTurn("9876", 2);
         if (correctResult)
-            System.out.printf("Congrats! The secret code is " + code + ".");
+            System.out.printf("Congrats! The secret code is " + secretCode + ".");
+    }
+
+    private static boolean playTurn(String answer) {
+        String grade = computeGrade(answer);
+        System.out.println("Grade: " + grade + ".");
+        return (secretCode.length() + " bull(s)").equals(grade);
     }
 
     private static boolean playTurn(String answer, int ordinal) {
@@ -53,18 +74,18 @@ public class Main {
         System.out.println(answer);
         String grade = computeGrade(answer);
         System.out.println("Grade: " + grade + ".");
-        return "4 bulls".equals(grade);
+        return (secretCode.length() + " bull(s)").equals(grade);
     }
 
     private static String computeGrade(String answer) {
         int bulls = 0;
         int cows = 0;
-        for (int i = 0; i < 4; i++) {
-            if (answer.charAt(i) == code.charAt(i)) {
+        for (int i = 0; i < secretCode.length(); i++) {
+            if (answer.charAt(i) == secretCode.charAt(i)) {
                 ++bulls;
             } else {
                 int currentIndex = i;
-                if (code.chars().anyMatch(ch -> ch == answer.charAt(currentIndex))) {
+                if (secretCode.chars().anyMatch(ch -> ch == answer.charAt(currentIndex))) {
                     ++cows;
                 }
             }
