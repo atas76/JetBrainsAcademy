@@ -12,7 +12,6 @@ public class Main {
 
         System.out.println("Please, enter the secret code's length:");
         int codeDigitsNum = scanner.nextInt();
-        System.out.println("Okay, let's start a game!");
 
         if (codeDigitsNum <= 10) {
             secretCode = generateSecretCode(codeDigitsNum);
@@ -20,9 +19,13 @@ public class Main {
         } else {
             System.out.println("Error: can't generate a secret number with a length of " + codeDigitsNum
                     + " because there aren't enough unique digits.");
+            System.exit(1);
         }
+
         int turn = 1;
         boolean guessed = false;
+
+        System.out.println("Okay, let's start a game!");
 
         while (!guessed) {
             System.out.println("Turn " + turn++ + ":");
@@ -53,25 +56,7 @@ public class Main {
         return secretNumberBuilder.toString();
     }
 
-    private static void gameFlowPrototype() {
-        System.out.println("The secret code is prepared: ****.");
-        System.out.println();
-        playTurn("1234", 1);
-        System.out.println();
-        boolean correctResult = playTurn("9876", 2);
-        if (correctResult)
-            System.out.printf("Congrats! The secret code is " + secretCode + ".");
-    }
-
     private static boolean playTurn(String answer) {
-        String grade = computeGrade(answer);
-        System.out.println("Grade: " + grade + ".");
-        return (secretCode.length() + " bull(s)").equals(grade);
-    }
-
-    private static boolean playTurn(String answer, int ordinal) {
-        System.out.println("Turn " + ordinal + ". Answer:");
-        System.out.println(answer);
         String grade = computeGrade(answer);
         System.out.println("Grade: " + grade + ".");
         return (secretCode.length() + " bull(s)").equals(grade);
