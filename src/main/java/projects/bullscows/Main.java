@@ -1,10 +1,12 @@
 package projects.bullscows;
 
+import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
 
     private static String secretCode;
+    private static Random rnd = new Random();
 
     public static void main(String[] args) {
 
@@ -41,6 +43,23 @@ public class Main {
         StringBuilder secretNumberBuilder = new StringBuilder(10);
 
         while (secretNumberBuilder.length() < codeDigitsNum) {
+
+            int currentDigit = rnd.nextInt(10);
+
+            if (currentDigit == 0 && secretNumberBuilder.isEmpty()) continue;
+            if (!secretNumberBuilder.toString().contains(String.valueOf(currentDigit))) {
+                secretNumberBuilder.append(currentDigit);
+            }
+        }
+        return secretNumberBuilder.toString();
+    }
+
+    /*
+    private static String generateSecretCode(int codeDigitsNum) {
+
+        StringBuilder secretNumberBuilder = new StringBuilder(10);
+
+        while (secretNumberBuilder.length() < codeDigitsNum) {
             long pseudoRandomNumber = System.nanoTime();
             String pseudoRandomNumberStr = String.valueOf(pseudoRandomNumber);
 
@@ -55,6 +74,7 @@ public class Main {
         }
         return secretNumberBuilder.toString();
     }
+     */
 
     private static boolean playTurn(String answer) {
         String grade = computeGrade(answer);
