@@ -54,28 +54,6 @@ public class Main {
         return secretNumberBuilder.toString();
     }
 
-    /*
-    private static String generateSecretCode(int codeDigitsNum) {
-
-        StringBuilder secretNumberBuilder = new StringBuilder(10);
-
-        while (secretNumberBuilder.length() < codeDigitsNum) {
-            long pseudoRandomNumber = System.nanoTime();
-            String pseudoRandomNumberStr = String.valueOf(pseudoRandomNumber);
-
-            for (int i = pseudoRandomNumberStr.length() - 1; i >= 0; i--) {
-                char currentChar = pseudoRandomNumberStr.charAt(i);
-                if (currentChar == '0' && secretNumberBuilder.isEmpty()) continue;
-                if (!secretNumberBuilder.toString().contains(Character.toString(currentChar))) {
-                    secretNumberBuilder.append(currentChar);
-                }
-                if (secretNumberBuilder.length() == codeDigitsNum) break;
-            }
-        }
-        return secretNumberBuilder.toString();
-    }
-     */
-
     private static boolean playTurn(String answer) {
         String grade = computeGrade(answer);
         System.out.println("Grade: " + grade + ".");
