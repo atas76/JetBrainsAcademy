@@ -8,21 +8,36 @@ public class Main {
     private static String secretCode;
     private static Random rnd = new Random();
 
+    private static char [] symbols;
+
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Please, enter the secret code's length:");
+        System.out.println("Input the length of the secret code:");
         int codeDigitsNum = scanner.nextInt();
 
-        if (codeDigitsNum <= 10) {
-            secretCode = generateSecretCode(codeDigitsNum);
-            // System.out.println("The random secret number is " + secretCode);
-        } else {
-            System.out.println("Error: can't generate a secret number with a length of " + codeDigitsNum
-                    + " because there aren't enough unique digits.");
-            System.exit(1);
+        System.out.println("Input the number of possible symbols in the code:");
+        int numberOfSymbols = scanner.nextInt();
+
+        symbols = new char[numberOfSymbols];
+
+        for (int i = 0; i < Math.min(numberOfSymbols, 10); i++) {
+            symbols[i] = (char) (i + '0');
         }
+
+        if (numberOfSymbols > 10) {
+            for (int i = 10; i < numberOfSymbols; i++) {
+                symbols[i] = (char) (i + 'a' - 10);
+            }
+        }
+        
+        // System.out.println(Arrays.toString(symbols));
+
+        System.out.println(getSecretCodePresentation(numberOfSymbols, codeDigitsNum));
+
+        secretCode = generateSecretCode(codeDigitsNum);
+        // System.out.println("The random secret number is " + secretCode);
 
         int turn = 1;
         boolean guessed = false;
@@ -38,17 +53,31 @@ public class Main {
         }
     }
 
-    private static String generateSecretCode(int codeDigitsNum) {
+    private static String getSecretCodePresentation(int numberOfSymbols, int codeDigitsNum) {
+        StringBuilder sb = new StringBuilder();
 
-        StringBuilder secretNumberBuilder = new StringBuilder(10);
+        for (int i = 0; i < codeDigitsNum; i++) {
+            sb.append('*');
+        }
 
-        while (secretNumberBuilder.length() < codeDigitsNum) {
+        sb.append(" (").append(symbols[0]).append('-').append(symbols[Math.min(9, numberOfSymbols - 1)]);
+        if (numberOfSymbols > 10) {
+            sb.append(", ").append(symbols[10]).append('-').append(symbols[symbols.length - 1]).append(").");
+        }
 
-            int currentDigit = rnd.nextInt(10);
+        return sb.toString();
+    }
 
-            if (currentDigit == 0 && secretNumberBuilder.isEmpty()) continue;
-            if (!secretNumberBuilder.toString().contains(String.valueOf(currentDigit))) {
-                secretNumberBuilder.append(currentDigit);
+    private static String generateSecretCode(int numberOfSymbols) {
+
+        StringBuilder secretNumberBuilder = new StringBuilder(numberOfSymbols);
+
+        while (secretNumberBuilder.length() < numberOfSymbols) {
+
+            char currentSymbol = symbols[rnd.nextInt(symbols.length)];
+
+            if (!secretNumberBuilder.toString().contains(String.valueOf(currentSymbol))) {
+                secretNumberBuilder.append(currentSymbol);
             }
         }
         return secretNumberBuilder.toString();
