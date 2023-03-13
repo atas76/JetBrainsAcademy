@@ -15,10 +15,28 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Input the length of the secret code:");
-        int codeDigitsNum = scanner.nextInt();
+        String secretCodeLength = scanner.nextLine();
+
+        int secretCodeSymbolsNum = 0;
+        try {
+            secretCodeSymbolsNum = Integer.parseInt(secretCodeLength);
+        } catch (NumberFormatException nfe) {
+            System.out.printf("Error: \"%s\" isn't a valid number.%n", secretCodeLength);
+            System.exit(2);
+        }
 
         System.out.println("Input the number of possible symbols in the code:");
         int numberOfSymbols = scanner.nextInt();
+
+        if (numberOfSymbols > 36) {
+            System.out.println("Error: maximum number of possible symbols in the code is 36 (0-9, a-z).");
+            System.exit(3);
+        }
+
+        if (numberOfSymbols < secretCodeSymbolsNum) {
+            System.out.printf("Error: it's not possible to generate a code with a length of %d with %d unique symbols.%n", secretCodeSymbolsNum, numberOfSymbols);
+            System.exit(1);
+        }
 
         symbols = new char[numberOfSymbols];
 
@@ -31,13 +49,13 @@ public class Main {
                 symbols[i] = (char) (i + 'a' - 10);
             }
         }
-        
+
         // System.out.println(Arrays.toString(symbols));
 
-        System.out.println(getSecretCodePresentation(numberOfSymbols, codeDigitsNum));
+        System.out.println("The secret is prepared: " + getSecretCodePresentation(numberOfSymbols, secretCodeSymbolsNum));
 
-        secretCode = generateSecretCode(codeDigitsNum);
-        // System.out.println("The random secret number is " + secretCode);
+        secretCode = generateSecretCode(secretCodeSymbolsNum);
+        System.out.println("The random secret number is " + secretCode);
 
         int turn = 1;
         boolean guessed = false;
