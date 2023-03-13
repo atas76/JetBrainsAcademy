@@ -20,6 +20,10 @@ public class Main {
         int secretCodeSymbolsNum = 0;
         try {
             secretCodeSymbolsNum = Integer.parseInt(secretCodeLength);
+            if (secretCodeSymbolsNum <= 0) {
+                System.out.println("Error: secret code length must be a number above zero");
+                System.exit(4);
+            }
         } catch (NumberFormatException nfe) {
             System.out.printf("Error: \"%s\" isn't a valid number.%n", secretCodeLength);
             System.exit(2);
