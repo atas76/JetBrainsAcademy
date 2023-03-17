@@ -1,6 +1,7 @@
 package projects.rockpaperscissors;
 
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
@@ -9,13 +10,15 @@ public class Main {
     private static final String SCISSORS = "scissors";
     private static final String ROCK = "rock";
 
-    private static Map<String, String> winningOrderMap = Map.ofEntries(
+    private static final String [] CHOICES = { PAPER, SCISSORS, ROCK };
+
+    private static final Map<String, String> winningOrderMap = Map.ofEntries(
             Map.entry(PAPER, ROCK),
             Map.entry(SCISSORS, PAPER),
             Map.entry(ROCK, SCISSORS)
     );
 
-    private static Map<String, String> losingOrderMap = Map.ofEntries(
+    private static final Map<String, String> losingOrderMap = Map.ofEntries(
             Map.entry(SCISSORS, ROCK),
             Map.entry(ROCK, PAPER),
             Map.entry(PAPER, SCISSORS)
@@ -27,25 +30,28 @@ public class Main {
         String playerChoice = scanner.next();
 
         String computerChoice = getComputerChoice(playerChoice);
-        int comparisonResult = compare(playerChoice, computerChoice);
-        if (comparisonResult > 0) {
-            System.out.println("Sorry, but the computer chose " + computerChoice);
-        } else {
-            System.out.println("Error: this is not part of the script yet");
+        displayResult(compare(playerChoice, computerChoice), computerChoice);
+    }
+
+    private static void displayResult(int result, String computerOption) {
+        switch (result) {
+            case -1 -> System.out.println("Sorry, but the computer chose " + computerOption);
+            case 0 -> System.out.println("There is a draw (" + computerOption + ")");
+            case 1 -> System.out.println("Well done. The computer chose " + computerOption + " and failed");
         }
     }
 
     private static int compare(String choiceA, String choiceB) {
         if (choiceB.equals(winningOrderMap.get(choiceA))) {
-            return -1;
+            return 1;
         }
         if (choiceB.equals(losingOrderMap.get(choiceA))) {
-            return 1;
+            return -1;
         }
         return 0;
     }
 
     private static String getComputerChoice(String playerChoice) {
-        return losingOrderMap.get(playerChoice);
+        return CHOICES[new Random().nextInt(3)];
     }
 }
