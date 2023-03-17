@@ -1,5 +1,6 @@
 package projects.rockpaperscissors;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
@@ -27,10 +28,22 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
+
         String playerChoice = scanner.next();
 
-        String computerChoice = getComputerChoice(playerChoice);
-        displayResult(compare(playerChoice, computerChoice), computerChoice);
+        while (!"!exit".equals(playerChoice)) {
+            String currentPlayerChoice = playerChoice;
+            if (Arrays.stream(CHOICES).noneMatch(choice -> choice.equals(currentPlayerChoice))) {
+                System.out.println("Invalid input");
+                playerChoice = scanner.next();
+                continue;
+            }
+            String computerChoice = getComputerChoice(playerChoice);
+            displayResult(compare(playerChoice, computerChoice), computerChoice);
+            playerChoice = scanner.next();
+        }
+
+        System.out.println("Bye!");
     }
 
     private static void displayResult(int result, String computerOption) {
