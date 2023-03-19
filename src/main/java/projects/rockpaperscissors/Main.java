@@ -11,18 +11,18 @@ public class Main {
     private static final String SCISSORS = "scissors";
     private static final String ROCK = "rock";
 
-    private static final String [] CHOICES = { PAPER, SCISSORS, ROCK };
+    private static String [] gameChoices = { SCISSORS, PAPER, ROCK };
 
-    private static final Map<String, String> winningOrderMap = Map.ofEntries(
-            Map.entry(PAPER, ROCK),
-            Map.entry(SCISSORS, PAPER),
-            Map.entry(ROCK, SCISSORS)
+    private static Map<String, Set<String>> winningOrderMap = Map.ofEntries(
+            Map.entry(PAPER, Set.of(ROCK)),
+            Map.entry(SCISSORS, Set.of(PAPER)),
+            Map.entry(ROCK, Set.of(SCISSORS))
     );
 
-    private static final Map<String, String> losingOrderMap = Map.ofEntries(
-            Map.entry(SCISSORS, ROCK),
-            Map.entry(ROCK, PAPER),
-            Map.entry(PAPER, SCISSORS)
+    private static Map<String, Set<String>> losingOrderMap = Map.ofEntries(
+            Map.entry(SCISSORS, Set.of(ROCK)),
+            Map.entry(ROCK, Set.of(PAPER)),
+            Map.entry(PAPER, Set.of(SCISSORS))
     );
 
     public static void main(String[] args) {
@@ -32,10 +32,19 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("Enter your name: ");
-        String playerName = scanner.next();
+        String playerName = scanner.nextLine();
         int playerScore = scores.getOrDefault(playerName, 0);
 
         System.out.println("Hello, " + playerName);
+
+        String gameChoicesInput = scanner.nextLine();
+
+        if (!gameChoicesInput.isEmpty()) {
+            gameChoices = gameChoicesInput.split(",");
+            createWinningLosingOrders();
+        }
+
+        System.out.println("Okay, let's start");
 
         String playerChoice = scanner.next();
 
@@ -50,12 +59,12 @@ public class Main {
                 playerChoice = scanner.next();
                 continue;
             }
-            if (Arrays.stream(CHOICES).noneMatch(choice -> choice.equals(currentPlayerChoice))) {
+            if (Arrays.stream(gameChoices).noneMatch(choice -> choice.equals(currentPlayerChoice))) {
                 System.out.println("Invalid input");
                 playerChoice = scanner.next();
                 continue;
             }
-            String computerChoice = getComputerChoice(playerChoice);
+            String computerChoice = getComputerChoice();
             int result = compare(playerChoice, computerChoice);
             playerScore += 50 + result * 50;
             displayResult(result, computerChoice);
@@ -64,6 +73,27 @@ public class Main {
 
         System.out.println("Bye!");
 
+    }
+
+    private static void createWinningLosingOrders() {
+        winningOrderMap = new HashMap<>();
+        losingOrderMap = new HashMap<>();
+        for (int i = 0; i < gameChoices.length; i++) {
+            int offsetBoundary = i + gameChoices.length / 2;
+            for (int j = i + 1; j < Math.min(gameChoices.length, offsetBoundary + 1); j++) {
+                addWinningOrder(j, i);
+            }
+            for (int j = 0; j < offsetBoundary - gameChoices.length + 1; j++) {
+                addWinningOrder(j, i);
+            }
+        }
+    }
+
+    private static void addWinningOrder(int winningIndex, int losingIndex) {
+        winningOrderMap.putIfAbsent(gameChoices[winningIndex], new HashSet<>());
+        losingOrderMap.putIfAbsent(gameChoices[losingIndex], new HashSet<>());
+        winningOrderMap.get(gameChoices[winningIndex]).add(gameChoices[losingIndex]);
+        losingOrderMap.get(gameChoices[losingIndex]).add(gameChoices[winningIndex]);
     }
 
     private static Map<String, Integer> readScores() {
@@ -99,16 +129,16 @@ public class Main {
     }
 
     private static int compare(String choiceA, String choiceB) {
-        if (choiceB.equals(winningOrderMap.get(choiceA))) {
+        if (winningOrderMap.get(choiceA).contains(choiceB)) {
             return 1;
         }
-        if (choiceB.equals(losingOrderMap.get(choiceA))) {
+        if (losingOrderMap.get(choiceA).contains(choiceB)) {
             return -1;
         }
         return 0;
     }
 
-    private static String getComputerChoice(String playerChoice) {
-        return CHOICES[new Random().nextInt(3)];
+    private static String getComputerChoice() {
+        return gameChoices[new Random().nextInt(gameChoices.length)];
     }
 }
