@@ -18,9 +18,9 @@ public class Main {
             wordNumber += words.length;
         }
 
-        int wordsPerSentence = wordNumber / sentenceNumber;
+        double wordsPerSentence = wordNumber / (double) sentenceNumber;
 
-        if (wordsPerSentence > 10) {
+        if (wordsPerSentence > 10.0) {
             System.out.println("HARD");
         } else {
             System.out.println("EASY");
