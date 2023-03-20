@@ -9,7 +9,18 @@ public class Main {
 
         String text = scanner.nextLine();
 
-        if (text.length() > 100) {
+        String [] sentences = text.split("[.!?]");
+        int sentenceNumber = sentences.length;
+        int wordNumber = 0;
+
+        for (int i = 0; i < sentences.length; i++) {
+            String [] words = sentences[i].trim().split("\\s");
+            wordNumber += words.length;
+        }
+
+        int wordsPerSentence = wordNumber / sentenceNumber;
+
+        if (wordsPerSentence > 10) {
             System.out.println("HARD");
         } else {
             System.out.println("EASY");
