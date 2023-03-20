@@ -1,4 +1,4 @@
-package projects.readablityscore;
+package projects.readability;
 
 import java.util.Scanner;
 
