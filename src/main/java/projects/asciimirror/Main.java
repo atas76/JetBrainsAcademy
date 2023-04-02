@@ -26,8 +26,14 @@ public class Main {
             Files.lines(path).forEachOrdered(fileLines::add);
 
             Optional<Integer> maxLength = fileLines.stream().map(String::length).max(Integer::compare);
-            fileLines.stream().map(line -> padString(line, maxLength.get())).map(line -> line + " | " + line)
+            fileLines.stream().map(line -> padString(line, maxLength.get()))
+                    .map(line -> line + (!line.endsWith(" ") ? " " : "") + "| " + line)
                     .toList().forEach(System.out::println);
+
+            for (String str: fileLines) {
+                System.out.println(str.length());
+                System.out.println(padString(str, maxLength.get()).length());
+            }
 
         } catch (IOException ex) {
             System.out.println("File not found!");
@@ -35,6 +41,6 @@ public class Main {
     }
 
     private static String padString(String str, int desiredLength) {
-        return str + "".repeat(desiredLength - str.length());
+        return str + " ".repeat(desiredLength - str.length());
     }
 }
