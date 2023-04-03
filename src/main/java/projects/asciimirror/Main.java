@@ -27,13 +27,8 @@ public class Main {
 
             Optional<Integer> maxLength = fileLines.stream().map(String::length).max(Integer::compare);
             fileLines.stream().map(line -> padString(line, maxLength.get()))
-                    .map(line -> line + (!line.endsWith(" ") ? " " : "") + "| " + line)
+                    .map(line -> line  + " | " + line)
                     .toList().forEach(System.out::println);
-
-            for (String str: fileLines) {
-                System.out.println(str.length());
-                System.out.println(padString(str, maxLength.get()).length());
-            }
 
         } catch (IOException ex) {
             System.out.println("File not found!");
