@@ -4,10 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
 
@@ -27,12 +24,37 @@ public class Main {
 
             Optional<Integer> maxLength = fileLines.stream().map(String::length).max(Integer::compare);
             fileLines.stream().map(line -> padString(line, maxLength.get()))
-                    .map(line -> line  + " | " + line)
+                    .map(line -> line  + " | " + reverseString(line))
                     .toList().forEach(System.out::println);
 
         } catch (IOException ex) {
             System.out.println("File not found!");
         }
+    }
+
+    private static String reverseString(String str) {
+        StringBuilder retVal = new StringBuilder();
+        for (int i = str.length() - 1; i >= 0; i--) {
+            retVal.append(getSymmetricalChar(str.charAt(i)));
+        }
+        return retVal.toString();
+    }
+
+    private static char getSymmetricalChar(char ch) {
+        Map<Character, Character> mirroredChars = Map.ofEntries(
+                Map.entry('<', '>'),
+                Map.entry('>', '<'),
+                Map.entry('[', ']'),
+                Map.entry(']', '['),
+                Map.entry('{', '}'),
+                Map.entry('}', '{'),
+                Map.entry('(', ')'),
+                Map.entry(')', '('),
+                Map.entry('/', '\\'),
+                Map.entry('\\', '/')
+        );
+
+        return mirroredChars.getOrDefault(ch, ch);
     }
 
     private static String padString(String str, int desiredLength) {
