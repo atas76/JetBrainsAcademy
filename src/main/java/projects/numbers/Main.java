@@ -41,6 +41,9 @@ public class Main {
                     System.out.println("The first parameter should be a natural number or zero.");
                 }
             }
+            if (inputOffset < 0) {
+                System.out.println("The second parameter should be a natural number.");
+            }
             System.out.println();
             System.out.println("Enter a request: "); readInput(scanner);
         }
@@ -60,7 +63,11 @@ public class Main {
             return;
         }
         if (inputArray.length == 2) {
-            inputOffset = Integer.parseInt(inputArray[1]);
-        }
+            try {
+                inputOffset = Integer.parseInt(inputArray[1]);
+            } catch (NumberFormatException nfex) {
+                inputOffset = -1;
+            }
+         }
     }
 }
