@@ -21,6 +21,7 @@ public class Number {
 
         properties.put("duck", isDuck());
         properties.put("palindromic", isPalindromic());
+        properties.put("gapful", isGapful());
     }
 
     public void print() {
@@ -30,6 +31,7 @@ public class Number {
         System.out.println("buzz: " + properties.get("buzz"));
         System.out.println("duck: " + properties.get("duck"));
         System.out.println("palindromic: " + properties.get("palindromic"));
+        System.out.println("gapful: " + properties.get("gapful"));
     }
 
     public void printSummary() {
@@ -63,5 +65,24 @@ public class Number {
             quotient /= 10;
         }
         return reverseNumber == this.number;
+    }
+
+    private boolean isGapful() {
+
+        if (number < 100) return false;
+
+        long quotient = number / 10;
+        long modulo = number % 10;
+        long lastDigit = modulo;
+
+        while (quotient > 0) {
+            modulo = quotient % 10;
+            quotient /= 10;
+        }
+
+        long firstDigit = modulo;
+        long divisor = firstDigit * 10 + lastDigit;
+
+        return (number % divisor == 0);
     }
 }
