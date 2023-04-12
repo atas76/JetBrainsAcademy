@@ -43,6 +43,18 @@ public class Number {
         System.out.println(sb.substring(0, sb.length() - 2));
     }
 
+    public boolean hasProperty(String property) {
+        return switch(property) {
+            case "even" -> number % 2 == 0;
+            case "odd" ->  number % 2 != 0;
+            case "buzz" -> (number % 7 == 0) || number % 10 == 7;
+            case "duck" -> isDuck();
+            case "palindromic" -> isPalindromic();
+            case "gapful" -> isGapful();
+            default -> false;
+        };
+    }
+
     private boolean isDuck() {
 
         long quotient = number;

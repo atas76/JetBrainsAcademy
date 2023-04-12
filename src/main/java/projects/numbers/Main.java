@@ -1,5 +1,7 @@
 package projects.numbers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -8,6 +10,7 @@ public class Main {
     private static String [] inputArray;
     private static int inputOffset;
     private static long numberInput;
+    private static String currentProperty;
 
     public static void main(String[] args) {
 
@@ -19,6 +22,7 @@ public class Main {
         System.out.println("enter two natural numbers to obtain the properties of the list:");
         System.out.println("* the first parameter represents a starting number;");
         System.out.println("* the second parameter shows how many consecutive numbers are to be processed;");
+        System.out.println("- two natural numbers and a property to search for;");
         System.out.println("- separate the parameters with one space;");
         System.out.println("- enter 0 to exit.");
         System.out.println();
@@ -33,12 +37,30 @@ public class Main {
                 }
             }
             if (inputOffset > 0) {
-                if (numberInput > 0) {
-                    for (long i = numberInput; i < numberInput + inputOffset; i++) {
-                        new Number(i).printSummary();
+                if (currentProperty.isEmpty()) {
+                    if (numberInput > 0) {
+                        for (long i = numberInput; i < numberInput + inputOffset; i++) {
+                            new Number(i).printSummary();
+                        }
+                    } else {
+                        System.out.println("The first parameter should be a natural number or zero.");
                     }
                 } else {
-                    System.out.println("The first parameter should be a natural number or zero.");
+                    if (numberInput > 0) {
+                        List<Long> propertySatisfyingNumbers = new ArrayList<>();
+                        int numberOffset = 0;
+                        int numbersFound = 0;
+                        while (numbersFound < inputOffset) {
+                            if (new Number(numberInput + numberOffset).hasProperty(currentProperty)) {
+                                propertySatisfyingNumbers.add(numberInput + numberOffset);
+                                ++numbersFound;
+                            }
+                            ++numberOffset;
+                        }
+                        propertySatisfyingNumbers.forEach(num -> new Number(num).printSummary());
+                    } else {
+                        System.out.println("The first parameter should be a natural number or zero.");
+                    }
                 }
             }
             if (inputOffset < 0) {
@@ -56,15 +78,19 @@ public class Main {
         input = scanner.nextLine();
         inputArray = input.split("\s");
         inputOffset = 0;
+        currentProperty = "";
         try {
             numberInput = Long.parseLong(inputArray[0]);
         } catch(NumberFormatException nfex) {
             numberInput = -1;
             return;
         }
-        if (inputArray.length == 2) {
+        if (inputArray.length > 1) {
             try {
                 inputOffset = Integer.parseInt(inputArray[1]);
+                if (inputArray.length > 2) {
+                    currentProperty = inputArray[2];
+                }
             } catch (NumberFormatException nfex) {
                 inputOffset = -1;
             }
