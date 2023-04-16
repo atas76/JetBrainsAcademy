@@ -22,6 +22,7 @@ public class Number {
         properties.put("duck", isDuck());
         properties.put("palindromic", isPalindromic());
         properties.put("gapful", isGapful());
+        properties.put("spy", isSpy());
     }
 
     public void print() {
@@ -32,6 +33,7 @@ public class Number {
         System.out.println("duck: " + properties.get("duck"));
         System.out.println("palindromic: " + properties.get("palindromic"));
         System.out.println("gapful: " + properties.get("gapful"));
+        System.out.println("spy: " + properties.get("spy"));
     }
 
     public void printSummary() {
@@ -51,6 +53,7 @@ public class Number {
             case "duck" -> isDuck();
             case "palindromic" -> isPalindromic();
             case "gapful" -> isGapful();
+            case "spy" -> isSpy();
             default -> false;
         };
     }
@@ -96,5 +99,22 @@ public class Number {
         long divisor = firstDigit * 10 + lastDigit;
 
         return (number % divisor == 0);
+    }
+
+    private boolean isSpy() {
+
+        long quotient = number / 10;
+        long modulo = number % 10;
+        long sum = modulo;
+        long product = modulo;
+
+        while (quotient > 0) {
+            modulo = quotient % 10;
+            sum += modulo;
+            product *= modulo;
+            quotient /= 10;
+        }
+
+        return sum == product;
     }
 }
