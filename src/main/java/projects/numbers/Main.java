@@ -3,6 +3,7 @@ package projects.numbers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Main {
 
@@ -90,6 +91,12 @@ public class Main {
                 inputOffset = Integer.parseInt(inputArray[1]);
                 if (inputArray.length > 2) {
                     currentProperty = inputArray[2];
+                    Set<String> properties = Number.getProperties();
+                    if (!properties.contains(currentProperty)) {
+                        numberInput = -1;
+                        System.out.println("The property [" + currentProperty.toUpperCase() + "] is wrong.");
+                        Number.printProperties();
+                    }
                 }
             } catch (NumberFormatException nfex) {
                 inputOffset = -1;

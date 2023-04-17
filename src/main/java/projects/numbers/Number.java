@@ -7,6 +7,7 @@ public class Number {
     private long number;
 
     private Map<String, Boolean> properties = new TreeMap<>();
+    private static Set<String> supportedProperties = Set.of("even", "odd", "buzz", "duck", "palindromic", "gapful", "spy");
 
     public Number(long number) {
 
@@ -23,6 +24,17 @@ public class Number {
         properties.put("palindromic", isPalindromic());
         properties.put("gapful", isGapful());
         properties.put("spy", isSpy());
+    }
+
+    public static Set<String> getProperties() {
+        return supportedProperties;
+    }
+
+    public static void printProperties() {
+        StringBuilder sb = new StringBuilder();
+        supportedProperties.forEach(property -> sb.append(property.toUpperCase()).append(", "));
+        sb.delete(sb.length() - 2, sb.length());
+        System.out.println("Available properties: [" + sb + "]");
     }
 
     public void print() {
