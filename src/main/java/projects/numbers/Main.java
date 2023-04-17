@@ -60,7 +60,16 @@ public class Main {
                         }
                         propertySatisfyingNumbers.forEach(num -> new Number(num).printSummary());
                     } else {
-                        System.out.println("The first parameter should be a natural number or zero.");
+                        switch ((int) numberInput) {
+                            case -1:
+                                System.out.println("The first parameter should be a natural number or zero.");
+                            case -2:
+                                System.out.println("The property [" + currentProperty.toUpperCase() + "] is wrong.");
+                                Number.printProperties();
+                                break;
+                            default:
+                                System.out.println("Unspecified error");
+                        }
                     }
                 }
             }
@@ -90,12 +99,10 @@ public class Main {
             try {
                 inputOffset = Integer.parseInt(inputArray[1]);
                 if (inputArray.length > 2) {
-                    currentProperty = inputArray[2];
+                    currentProperty = inputArray[2].toLowerCase();
                     Set<String> properties = Number.getProperties();
                     if (!properties.contains(currentProperty)) {
-                        numberInput = -1;
-                        System.out.println("The property [" + currentProperty.toUpperCase() + "] is wrong.");
-                        Number.printProperties();
+                        numberInput = -2;
                     }
                 }
             } catch (NumberFormatException nfex) {
