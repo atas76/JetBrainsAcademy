@@ -12,6 +12,7 @@ public class Main {
     private static int inputOffset;
     private static long numberInput;
     private static String currentProperty;
+    private static String extraProperty;
 
     public static void main(String[] args) {
 
@@ -20,10 +21,11 @@ public class Main {
         System.out.println("Welcome to Amazing Numbers!");
         System.out.println("Supported requests:");
         System.out.println("- enter a natural number to know its properties;");
-        System.out.println("enter two natural numbers to obtain the properties of the list:");
+        System.out.println("- enter two natural numbers to obtain the properties of the list:");
         System.out.println("* the first parameter represents a starting number;");
-        System.out.println("* the second parameter shows how many consecutive numbers are to be processed;");
+        System.out.println("* the second parameter shows how many consecutive numbers are to be printed;");
         System.out.println("- two natural numbers and a property to search for;");
+        System.out.println("- two natural numbers and two properties to search for;");
         System.out.println("- separate the parameters with one space;");
         System.out.println("- enter 0 to exit.");
         System.out.println();
@@ -52,7 +54,15 @@ public class Main {
                         int numberOffset = 0;
                         int numbersFound = 0;
                         while (numbersFound < inputOffset) {
-                            if (new Number(numberInput + numberOffset).hasProperty(currentProperty)) {
+                            Number currentNumber = new Number(numberInput + numberOffset);
+                            boolean propertySatisfyingNumber;
+                            if (!extraProperty.isEmpty()) {
+                                propertySatisfyingNumber = currentNumber.hasProperty(currentProperty)
+                                        && currentNumber.hasProperty(extraProperty);
+                            } else {
+                                propertySatisfyingNumber = currentNumber.hasProperty(currentProperty);
+                            }
+                            if (propertySatisfyingNumber) {
                                 propertySatisfyingNumbers.add(numberInput + numberOffset);
                                 ++numbersFound;
                             }
@@ -65,6 +75,10 @@ public class Main {
                                 System.out.println("The first parameter should be a natural number or zero.");
                             case -2:
                                 System.out.println("The property [" + currentProperty.toUpperCase() + "] is wrong.");
+                                Number.printProperties();
+                                break;
+                            case -3:
+                                System.out.println("The property [" + extraProperty.toUpperCase() + "] is wrong.");
                                 Number.printProperties();
                                 break;
                             default:
@@ -89,6 +103,7 @@ public class Main {
         inputArray = input.split("\s");
         inputOffset = 0;
         currentProperty = "";
+        extraProperty = "";
         try {
             numberInput = Long.parseLong(inputArray[0]);
         } catch(NumberFormatException nfex) {
@@ -103,6 +118,11 @@ public class Main {
                     Set<String> properties = Number.getProperties();
                     if (!properties.contains(currentProperty)) {
                         numberInput = -2;
+                    } else if (inputArray.length > 3) {
+                        extraProperty = inputArray[3].toLowerCase();
+                        if (!properties.contains(extraProperty)) {
+                            numberInput = -3;
+                        }
                     }
                 }
             } catch (NumberFormatException nfex) {
