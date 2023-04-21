@@ -7,7 +7,7 @@ public class Number {
     private long number;
 
     private Map<String, Boolean> properties = new TreeMap<>();
-    private static Set<String> supportedProperties = Set.of("even", "odd", "buzz", "duck", "palindromic", "gapful", "spy");
+    private static Set<String> supportedProperties = Set.of("even", "odd", "buzz", "duck", "palindromic", "gapful", "spy", "square", "sunny");
 
     public Number(long number) {
 
@@ -24,6 +24,8 @@ public class Number {
         properties.put("palindromic", isPalindromic());
         properties.put("gapful", isGapful());
         properties.put("spy", isSpy());
+        properties.put("sunny", isSunny());
+        properties.put("square", isPerfectSquare());
     }
 
     public static Set<String> getProperties() {
@@ -46,6 +48,8 @@ public class Number {
         System.out.println("palindromic: " + properties.get("palindromic"));
         System.out.println("gapful: " + properties.get("gapful"));
         System.out.println("spy: " + properties.get("spy"));
+        System.out.println("sunny: " + properties.get("sunny"));
+        System.out.println("square: " + properties.get("square"));
     }
 
     public void printSummary() {
@@ -66,6 +70,8 @@ public class Number {
             case "palindromic" -> isPalindromic();
             case "gapful" -> isGapful();
             case "spy" -> isSpy();
+            case "square" -> isPerfectSquare();
+            case "sunny" -> isSunny();
             default -> false;
         };
     }
@@ -128,5 +134,17 @@ public class Number {
         }
 
         return sum == product;
+    }
+
+    private boolean isPerfectSquare() {
+        return isPerfectSquare(this.number);
+    }
+
+    private boolean isPerfectSquare(long number) {
+        return (long) Math.sqrt(number) * (long) Math.sqrt(number) == number;
+    }
+
+    private boolean isSunny() {
+        return isPerfectSquare(this.number + 1);
     }
 }
