@@ -81,6 +81,11 @@ public class Main {
                                 System.out.println("The property [" + extraProperty.toUpperCase() + "] is wrong.");
                                 Number.printProperties();
                                 break;
+                            case -4:
+                                System.out.println("The request contains mutually exclusive properties: [" +
+                                        currentProperty.toUpperCase() + ", " + extraProperty.toUpperCase() + "]");
+                                System.out.println("There are no numbers with these properties.");
+                                break;
                             default:
                                 System.out.println("Unspecified error");
                         }
@@ -122,6 +127,9 @@ public class Main {
                         extraProperty = inputArray[3].toLowerCase();
                         if (!properties.contains(extraProperty)) {
                             numberInput = -3;
+                        }
+                        if (Number.areMutuallyExclusiveProperties(currentProperty, extraProperty)) {
+                            numberInput = -4;
                         }
                     }
                 }

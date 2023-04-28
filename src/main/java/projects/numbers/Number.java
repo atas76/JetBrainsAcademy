@@ -8,6 +8,11 @@ public class Number {
 
     private Map<String, Boolean> properties = new TreeMap<>();
     private static Set<String> supportedProperties = Set.of("even", "odd", "buzz", "duck", "palindromic", "gapful", "spy", "square", "sunny");
+    private static Map<String, String> mutuallyExclusiveProperties = Map.ofEntries(
+        Map.entry("even", "odd"), Map.entry("odd", "even"),
+        Map.entry("duck", "spy"), Map.entry("spy", "duck"),
+        Map.entry("sunny", "square"), Map.entry("square", "sunny")
+    );
 
     public Number(long number) {
 
@@ -30,6 +35,10 @@ public class Number {
 
     public static Set<String> getProperties() {
         return supportedProperties;
+    }
+
+    public static boolean areMutuallyExclusiveProperties(String key, String value) {
+        return mutuallyExclusiveProperties.get(key).equals(value);
     }
 
     public static void printProperties() {
