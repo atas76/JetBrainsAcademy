@@ -38,6 +38,7 @@ public class Number {
     }
 
     public static boolean areMutuallyExclusiveProperties(String key, String value) {
+        if (mutuallyExclusiveProperties.get(key) == null) return false;
         return mutuallyExclusiveProperties.get(key).equals(value);
     }
 

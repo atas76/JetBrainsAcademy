@@ -1,9 +1,6 @@
 package projects.numbers;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 public class Main {
 
@@ -86,6 +83,10 @@ public class Main {
                                         currentProperty.toUpperCase() + ", " + extraProperty.toUpperCase() + "]");
                                 System.out.println("There are no numbers with these properties.");
                                 break;
+                            case -5:
+                                System.out.println("The properties [" + currentProperty.toUpperCase() + ", " + extraProperty.toUpperCase() + "] are wrong.");
+                                Number.printProperties();
+                                break;
                             default:
                                 System.out.println("Unspecified error");
                         }
@@ -123,10 +124,14 @@ public class Main {
                     Set<String> properties = Number.getProperties();
                     if (!properties.contains(currentProperty)) {
                         numberInput = -2;
-                    } else if (inputArray.length > 3) {
+                    }
+                    if (inputArray.length > 3) {
                         extraProperty = inputArray[3].toLowerCase();
                         if (!properties.contains(extraProperty)) {
                             numberInput = -3;
+                            if (!properties.contains(currentProperty)) {
+                                numberInput = -5;
+                            }
                         }
                         if (Number.areMutuallyExclusiveProperties(currentProperty, extraProperty)) {
                             numberInput = -4;
