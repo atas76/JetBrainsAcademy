@@ -8,8 +8,9 @@ public class Main {
     private static String [] inputArray;
     private static int inputOffset;
     private static long numberInput;
-    private static String currentProperty;
-    private static String extraProperty;
+    private final static List<String> properties = new ArrayList<>();
+    private final static List<String> wrongProperties = new ArrayList<>();
+    private static List<List<String>> mutuallyExclusiveProperties = new ArrayList<>();
 
     public static void main(String[] args) {
 
@@ -22,7 +23,6 @@ public class Main {
         System.out.println("* the first parameter represents a starting number;");
         System.out.println("* the second parameter shows how many consecutive numbers are to be printed;");
         System.out.println("- two natural numbers and a property to search for;");
-        System.out.println("- two natural numbers and two properties to search for;");
         System.out.println("- separate the parameters with one space;");
         System.out.println("- enter 0 to exit.");
         System.out.println();
@@ -37,7 +37,7 @@ public class Main {
                 }
             }
             if (inputOffset > 0) {
-                if (currentProperty.isEmpty()) {
+                if (properties.isEmpty()) {
                     if (numberInput > 0) {
                         for (long i = numberInput; i < numberInput + inputOffset; i++) {
                             new Number(i).printSummary();
@@ -52,14 +52,7 @@ public class Main {
                         int numbersFound = 0;
                         while (numbersFound < inputOffset) {
                             Number currentNumber = new Number(numberInput + numberOffset);
-                            boolean propertySatisfyingNumber;
-                            if (!extraProperty.isEmpty()) {
-                                propertySatisfyingNumber = currentNumber.hasProperty(currentProperty)
-                                        && currentNumber.hasProperty(extraProperty);
-                            } else {
-                                propertySatisfyingNumber = currentNumber.hasProperty(currentProperty);
-                            }
-                            if (propertySatisfyingNumber) {
+                            if (properties.stream().anyMatch(currentNumber::hasProperty)) {
                                 propertySatisfyingNumbers.add(numberInput + numberOffset);
                                 ++numbersFound;
                             }
@@ -71,21 +64,13 @@ public class Main {
                             case -1:
                                 System.out.println("The first parameter should be a natural number or zero.");
                             case -2:
-                                System.out.println("The property [" + currentProperty.toUpperCase() + "] is wrong.");
-                                Number.printProperties();
-                                break;
-                            case -3:
-                                System.out.println("The property [" + extraProperty.toUpperCase() + "] is wrong.");
-                                Number.printProperties();
-                                break;
-                            case -4:
-                                System.out.println("The request contains mutually exclusive properties: [" +
-                                        currentProperty.toUpperCase() + ", " + extraProperty.toUpperCase() + "]");
-                                System.out.println("There are no numbers with these properties.");
-                                break;
-                            case -5:
-                                System.out.println("The properties [" + currentProperty.toUpperCase() + ", " + extraProperty.toUpperCase() + "] are wrong.");
-                                Number.printProperties();
+                                wrongProperties.forEach(property -> System.out.println("The property [" + property.toUpperCase() + "] is wrong."));
+                                if (!wrongProperties.isEmpty()) Number.printProperties();
+                                mutuallyExclusiveProperties.forEach(propertyPair -> {
+                                    System.out.println("The request contains mutually exclusive properties: [" +
+                                            propertyPair.get(0).toUpperCase() + ", " + propertyPair.get(1).toUpperCase() + "]");
+                                    System.out.println("There are no numbers with these properties.");
+                                });
                                 break;
                             default:
                                 System.out.println("Unspecified error");
@@ -108,8 +93,6 @@ public class Main {
         input = scanner.nextLine();
         inputArray = input.split("\s");
         inputOffset = 0;
-        currentProperty = "";
-        extraProperty = "";
         try {
             numberInput = Long.parseLong(inputArray[0]);
         } catch(NumberFormatException nfex) {
@@ -120,22 +103,17 @@ public class Main {
             try {
                 inputOffset = Integer.parseInt(inputArray[1]);
                 if (inputArray.length > 2) {
-                    currentProperty = inputArray[2].toLowerCase();
-                    Set<String> properties = Number.getProperties();
-                    if (!properties.contains(currentProperty)) {
-                        numberInput = -2;
+                    for (int i = 2; i < inputArray.length; i++) {
+                        String property = inputArray[i].toLowerCase();
+                        if (!properties.contains(property)) {
+                            wrongProperties.add(property);
+                        } else {
+                            properties.add(property);
+                        }
                     }
-                    if (inputArray.length > 3) {
-                        extraProperty = inputArray[3].toLowerCase();
-                        if (!properties.contains(extraProperty)) {
-                            numberInput = -3;
-                            if (!properties.contains(currentProperty)) {
-                                numberInput = -5;
-                            }
-                        }
-                        if (Number.areMutuallyExclusiveProperties(currentProperty, extraProperty)) {
-                            numberInput = -4;
-                        }
+                    mutuallyExclusiveProperties = Number.findMutuallyExclusiveProperties(properties);
+                    if (!wrongProperties.isEmpty() || !mutuallyExclusiveProperties.isEmpty()) {
+                        numberInput = -2;
                     }
                 }
             } catch (NumberFormatException nfex) {

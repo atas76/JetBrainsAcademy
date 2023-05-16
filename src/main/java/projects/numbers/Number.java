@@ -37,6 +37,20 @@ public class Number {
         return supportedProperties;
     }
 
+    public static List<List<String>> findMutuallyExclusiveProperties(List<String> properties) {
+
+        List<List<String>> mutuallyExclusiveProperties = new ArrayList<>();
+
+        for (int i = 0; i < properties.size() - 1; i++) {
+            for (int j = i + 1; j < properties.size(); j++) {
+                if (areMutuallyExclusiveProperties(properties.get(i), properties.get(j))) {
+                    mutuallyExclusiveProperties.add(Arrays.asList(properties.get(i), properties.get(j)));
+                }
+            }
+        }
+        return mutuallyExclusiveProperties;
+    }
+
     public static boolean areMutuallyExclusiveProperties(String key, String value) {
         if (mutuallyExclusiveProperties.get(key) == null) return false;
         return mutuallyExclusiveProperties.get(key).equals(value);
