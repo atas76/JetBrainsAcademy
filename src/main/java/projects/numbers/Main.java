@@ -58,7 +58,7 @@ public class Main {
                         int numbersFound = 0;
                         while (numbersFound < inputOffset) {
                             Number currentNumber = new Number(numberInput + numberOffset);
-                            if (properties.stream().anyMatch(currentNumber::hasProperty)) {
+                            if (properties.stream().allMatch(currentNumber::hasProperty)) {
                                 propertySatisfyingNumbers.add(numberInput + numberOffset);
                                 ++numbersFound;
                             }
