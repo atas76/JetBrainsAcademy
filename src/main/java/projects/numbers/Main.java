@@ -43,7 +43,7 @@ public class Main {
                 }
             }
             if (inputOffset > 0) {
-                if (properties.isEmpty()) {
+                if (properties.isEmpty() && wrongProperties.isEmpty() && mutuallyExclusiveProperties.isEmpty()) {
                     if (numberInput > 0) {
                         for (long i = numberInput; i < numberInput + inputOffset; i++) {
                             new Number(i).printSummary();
@@ -70,7 +70,19 @@ public class Main {
                             case -1:
                                 System.out.println("The first parameter should be a natural number or zero.");
                             case -2:
-                                wrongProperties.forEach(property -> System.out.println("The property [" + property.toUpperCase() + "] is wrong."));
+                                if (wrongProperties.size() == 1) {
+                                    System.out.println("The property [" + wrongProperties.get(0).toUpperCase() + "] is wrong.");
+                                }
+                                if (wrongProperties.size() > 1) {
+                                    StringBuilder propertySetString = new StringBuilder();
+                                    propertySetString.append("[");
+                                    wrongProperties.forEach(property -> {
+                                        propertySetString.append(property.toUpperCase());
+                                        propertySetString.append(", ");
+                                    });
+                                    propertySetString.replace(propertySetString.length() - 2, propertySetString.length(), "]");
+                                    System.out.println("The properties " + propertySetString + " are wrong.");
+                                }
                                 if (!wrongProperties.isEmpty()) Number.printProperties();
                                 mutuallyExclusiveProperties.forEach(propertyPair -> {
                                     System.out.println("The request contains mutually exclusive properties: [" +
