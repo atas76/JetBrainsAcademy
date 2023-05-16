@@ -8,9 +8,15 @@ public class Main {
     private static String [] inputArray;
     private static int inputOffset;
     private static long numberInput;
-    private final static List<String> properties = new ArrayList<>();
-    private final static List<String> wrongProperties = new ArrayList<>();
+    private static List<String> properties = new ArrayList<>();
+    private static List<String> wrongProperties = new ArrayList<>();
     private static List<List<String>> mutuallyExclusiveProperties = new ArrayList<>();
+
+    private static void cleanupPropertyInput() {
+        properties = new ArrayList<>();
+        wrongProperties = new ArrayList<>();
+        mutuallyExclusiveProperties = new ArrayList<>();
+    }
 
     public static void main(String[] args) {
 
@@ -90,6 +96,7 @@ public class Main {
     }
 
     private static void readInput(Scanner scanner) {
+        cleanupPropertyInput();
         input = scanner.nextLine();
         inputArray = input.split("\s");
         inputOffset = 0;
@@ -105,7 +112,7 @@ public class Main {
                 if (inputArray.length > 2) {
                     for (int i = 2; i < inputArray.length; i++) {
                         String property = inputArray[i].toLowerCase();
-                        if (!properties.contains(property)) {
+                        if (!Number.getProperties().contains(property)) {
                             wrongProperties.add(property);
                         } else {
                             properties.add(property);
