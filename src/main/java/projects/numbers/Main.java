@@ -11,11 +11,13 @@ public class Main {
     private static List<String> properties = new ArrayList<>();
     private static List<String> wrongProperties = new ArrayList<>();
     private static List<List<String>> mutuallyExclusiveProperties = new ArrayList<>();
+    private static List<String> excludedProperties = new ArrayList<>();
 
     private static void cleanupPropertyInput() {
         properties = new ArrayList<>();
         wrongProperties = new ArrayList<>();
         mutuallyExclusiveProperties = new ArrayList<>();
+        excludedProperties = new ArrayList<>();
     }
 
     public static void main(String[] args) {
@@ -30,6 +32,7 @@ public class Main {
         System.out.println("* the first parameter represents a starting number;");
         System.out.println("* the second parameter shows how many consecutive numbers are to be printed;");
         System.out.println("- two natural numbers and properties to search for;");
+        System.out.println("- a property preceded by minus must not be present in numbers;");
         System.out.println("- separate the parameters with one space;");
         System.out.println("- enter 0 to exit.");
         System.out.println();
@@ -46,8 +49,23 @@ public class Main {
             if (inputOffset > 0) {
                 if (properties.isEmpty() && wrongProperties.isEmpty() && mutuallyExclusiveProperties.isEmpty()) {
                     if (numberInput > 0) {
-                        for (long i = numberInput; i < numberInput + inputOffset; i++) {
-                            new Number(i).printSummary();
+                        if (excludedProperties.isEmpty()) {
+                            for (long i = numberInput; i < numberInput + inputOffset; i++) {
+                                new Number(i).printSummary();
+                            }
+                        } else {
+                            List<Long> propertySatisfyingNumbers = new ArrayList<>();
+                            int numberOffset = 0;
+                            int numbersFound = 0;
+                            while (numbersFound < inputOffset) {
+                                Number currentNumber = new Number(numberInput + numberOffset);
+                                if (excludedProperties.stream().noneMatch(currentNumber::hasProperty)) {
+                                    propertySatisfyingNumbers.add(numberInput + numberOffset);
+                                    ++numbersFound;
+                                }
+                                ++numberOffset;
+                            }
+                            propertySatisfyingNumbers.forEach(num -> new Number(num).printSummary());
                         }
                     } else {
                         System.out.println("The first parameter should be a natural number or zero.");
@@ -59,8 +77,8 @@ public class Main {
                         int numbersFound = 0;
                         while (numbersFound < inputOffset) {
                             Number currentNumber = new Number(numberInput + numberOffset);
-                            // System.out.println(currentNumber);
-                            if (properties.stream().allMatch(currentNumber::hasProperty)) {
+                            if (properties.stream().allMatch(currentNumber::hasProperty) &&
+                                    excludedProperties.stream().noneMatch(currentNumber::hasProperty)) {
                                 propertySatisfyingNumbers.add(numberInput + numberOffset);
                                 ++numbersFound;
                             }
@@ -126,9 +144,12 @@ public class Main {
                 if (inputArray.length > 2) {
                     for (int i = 2; i < inputArray.length; i++) {
                         String property = inputArray[i].toLowerCase();
-                        if (!Number.getProperties().contains(property)) {
+                        if (property.startsWith("-")) {
+                            excludedProperties.add(property.substring(1));
+                        }
+                        if (!Number.getProperties().contains(property) && !property.startsWith("-")) {
                             wrongProperties.add(property);
-                        } else {
+                        } else if (!property.startsWith("-")) {
                             properties.add(property);
                         }
                     }
