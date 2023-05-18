@@ -55,6 +55,27 @@ public class Number {
         return mutuallyExclusiveProperties;
     }
 
+    public static List<List<String>> findMutuallyExcludedProperties(List<String> properties) {
+        if (properties.contains("odd") && properties.contains("even")) {
+            return Arrays.asList(Arrays.asList("odd", "even"));
+        }
+        return new ArrayList<>();
+    }
+
+    public static List<List<String>> findMutuallyExclusiveProperties(List<String> properties, List<String> excludedProperties) {
+
+        List<List<String>> mutuallyExclusiveProperties = new ArrayList<>();
+
+        for (int i = 0; i < properties.size(); i++) {
+            for (int j = 0; j < excludedProperties.size(); j++) {
+                if (properties.get(i).equals(excludedProperties.get(j))) {
+                    mutuallyExclusiveProperties.add(Arrays.asList(properties.get(i), "-" + excludedProperties.get(j)));
+                }
+            }
+        }
+        return mutuallyExclusiveProperties;
+    }
+
     public static boolean areMutuallyExclusiveProperties(String key, String value) {
         if (mutuallyExclusiveProperties.get(key) == null) return false;
         return mutuallyExclusiveProperties.get(key).equals(value);

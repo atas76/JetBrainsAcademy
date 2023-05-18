@@ -154,12 +154,15 @@ public class Main {
                         }
                     }
                     mutuallyExclusiveProperties = Number.findMutuallyExclusiveProperties(properties);
-                    var mutuallyExcludedProperties = Number.findMutuallyExclusiveProperties(excludedProperties);
+                    var mutuallyExcludedProperties =
+                            Number.findMutuallyExcludedProperties(excludedProperties);
                     mutuallyExcludedProperties.forEach(propertyPair -> {
                         propertyPair.set(0, "-" + propertyPair.get(0));
                         propertyPair.set(1, "-" + propertyPair.get(1));
                     });
                     mutuallyExclusiveProperties.addAll(mutuallyExcludedProperties);
+                    mutuallyExclusiveProperties.addAll(
+                            Number.findMutuallyExclusiveProperties(properties, excludedProperties));
                     if (!wrongProperties.isEmpty() || !mutuallyExclusiveProperties.isEmpty()) {
                         numberInput = -2;
                     }
