@@ -151,6 +151,10 @@ public class Main {
                             wrongProperties.add(property);
                         } else if (!property.startsWith("-")) {
                             properties.add(property);
+                        } else {
+                            if (!Number.getProperties().contains(property.substring(1))) {
+                                wrongProperties.add(property);
+                            }
                         }
                     }
                     mutuallyExclusiveProperties = Number.findMutuallyExclusiveProperties(properties);
