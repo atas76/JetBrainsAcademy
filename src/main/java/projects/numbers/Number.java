@@ -7,19 +7,28 @@ public class Number {
     private long number;
 
     private Map<String, Boolean> properties = new TreeMap<>();
-    private static Set<String> supportedProperties = Set.of("even", "odd", "buzz", "duck", "palindromic", "gapful", "spy", "square", "sunny", "jumping");
+    private static Set<String> supportedProperties =
+            Set.of("even", "odd", "buzz", "duck", "palindromic", "gapful", "spy", "square", "sunny", "jumping",
+                    "happy", "sad");
     private static Map<String, String> mutuallyExclusiveProperties = Map.ofEntries(
         Map.entry("even", "odd"), Map.entry("odd", "even"),
         Map.entry("duck", "spy"), Map.entry("spy", "duck"),
-        Map.entry("sunny", "square"), Map.entry("square", "sunny")
+        Map.entry("sunny", "square"), Map.entry("square", "sunny"),
+        Map.entry("happy", "sad"), Map.entry("sad", "happy")
     );
 
-    private int [] digits;
+    int [] digits;
 
     public Number(long number) {
+        this(number, false);
+    }
+
+    public Number(long number, boolean intermediate) {
 
         this.number = number;
         this.digits = getDigits();
+
+        if (intermediate) return;
 
         properties.put("even", number % 2 == 0) ;
         properties.put("odd", number % 2 != 0);
@@ -35,6 +44,8 @@ public class Number {
         properties.put("sunny", isSunny());
         properties.put("square", isPerfectSquare());
         properties.put("jumping", isJumping());
+        properties.put("happy", isHappy());
+        properties.put("sad", !properties.get("happy"));
     }
 
     public static Set<String> getProperties() {
@@ -56,10 +67,16 @@ public class Number {
     }
 
     public static List<List<String>> findMutuallyExcludedProperties(List<String> properties) {
+
+        List<List<String>> retVal = new ArrayList<>();
+
         if (properties.contains("odd") && properties.contains("even")) {
-            return Arrays.asList(Arrays.asList("odd", "even"));
+            retVal.add(Arrays.asList("odd", "even"));
         }
-        return new ArrayList<>();
+        if (properties.contains("happy") && properties.contains("sad")) {
+            retVal.add(Arrays.asList("happy", "sad"));
+        }
+        return retVal;
     }
 
     public static List<List<String>> findMutuallyExclusiveProperties(List<String> properties, List<String> excludedProperties) {
@@ -100,6 +117,8 @@ public class Number {
         System.out.println("sunny: " + properties.get("sunny"));
         System.out.println("square: " + properties.get("square"));
         System.out.println("jumping: " + properties.get("jumping"));
+        System.out.println("happy: " + properties.get("happy"));
+        System.out.println("sad: " + properties.get("sad"));
     }
 
     public void printSummary() {
@@ -123,11 +142,13 @@ public class Number {
             case "square" -> isPerfectSquare();
             case "sunny" -> isSunny();
             case "jumping" -> isJumping();
+            case "happy" -> isHappy();
+            case "sad" -> !isHappy();
             default -> false;
         };
     }
 
-    private int[] getDigits() {
+    int[] getDigits() {
 
         List<Integer> digits = new ArrayList<>();
 
@@ -220,6 +241,25 @@ public class Number {
             }
         }
         return true;
+    }
+
+    private boolean isHappy() {
+        List<Long> sequence = new ArrayList<>();
+        long squaredDigitsSum = getSquaredDigitsSum(number);
+        while (squaredDigitsSum != 1 && squaredDigitsSum != number && !sequence.contains(squaredDigitsSum)) {
+            sequence.add(squaredDigitsSum);
+            squaredDigitsSum = getSquaredDigitsSum(squaredDigitsSum);
+        }
+        return squaredDigitsSum == 1;
+    }
+
+    private long getSquaredDigitsSum(long number) {
+        int [] digits = new Number(number, true).getDigits();
+        long squaredDigitsSum = 0;
+        for (int i = 0; i < digits.length; i++) {
+            squaredDigitsSum += (long) digits[i] * digits[i];
+        }
+        return squaredDigitsSum;
     }
 
     @Override
