@@ -23,12 +23,13 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Welcome to Amazing Numbers!");
+        System.out.println();
         System.out.println("Supported requests:");
         System.out.println("- enter a natural number to know its properties;");
         System.out.println("- enter two natural numbers to obtain the properties of the list:");
         System.out.println("* the first parameter represents a starting number;");
         System.out.println("* the second parameter shows how many consecutive numbers are to be printed;");
-        System.out.println("- two natural numbers and a property to search for;");
+        System.out.println("- two natural numbers and properties to search for;");
         System.out.println("- separate the parameters with one space;");
         System.out.println("- enter 0 to exit.");
         System.out.println();
@@ -58,6 +59,7 @@ public class Main {
                         int numbersFound = 0;
                         while (numbersFound < inputOffset) {
                             Number currentNumber = new Number(numberInput + numberOffset);
+                            // System.out.println(currentNumber);
                             if (properties.stream().allMatch(currentNumber::hasProperty)) {
                                 propertySatisfyingNumbers.add(numberInput + numberOffset);
                                 ++numbersFound;

@@ -7,16 +7,19 @@ public class Number {
     private long number;
 
     private Map<String, Boolean> properties = new TreeMap<>();
-    private static Set<String> supportedProperties = Set.of("even", "odd", "buzz", "duck", "palindromic", "gapful", "spy", "square", "sunny");
+    private static Set<String> supportedProperties = Set.of("even", "odd", "buzz", "duck", "palindromic", "gapful", "spy", "square", "sunny", "jumping");
     private static Map<String, String> mutuallyExclusiveProperties = Map.ofEntries(
         Map.entry("even", "odd"), Map.entry("odd", "even"),
         Map.entry("duck", "spy"), Map.entry("spy", "duck"),
         Map.entry("sunny", "square"), Map.entry("square", "sunny")
     );
 
+    private int [] digits;
+
     public Number(long number) {
 
         this.number = number;
+        this.digits = getDigits();
 
         properties.put("even", number % 2 == 0) ;
         properties.put("odd", number % 2 != 0);
@@ -31,6 +34,7 @@ public class Number {
         properties.put("spy", isSpy());
         properties.put("sunny", isSunny());
         properties.put("square", isPerfectSquare());
+        properties.put("jumping", isJumping());
     }
 
     public static Set<String> getProperties() {
@@ -74,6 +78,7 @@ public class Number {
         System.out.println("spy: " + properties.get("spy"));
         System.out.println("sunny: " + properties.get("sunny"));
         System.out.println("square: " + properties.get("square"));
+        System.out.println("jumping: " + properties.get("jumping"));
     }
 
     public void printSummary() {
@@ -96,8 +101,23 @@ public class Number {
             case "spy" -> isSpy();
             case "square" -> isPerfectSquare();
             case "sunny" -> isSunny();
+            case "jumping" -> isJumping();
             default -> false;
         };
+    }
+
+    private int[] getDigits() {
+
+        List<Integer> digits = new ArrayList<>();
+
+        long quotient = number;
+
+        while (quotient > 0) {
+            digits.add( (int) quotient % 10);
+            quotient /= 10;
+        }
+
+        return digits.stream().mapToInt(i -> i).toArray();
     }
 
     private boolean isDuck() {
@@ -170,5 +190,19 @@ public class Number {
 
     private boolean isSunny() {
         return isPerfectSquare(this.number + 1);
+    }
+
+    private boolean isJumping() {
+        for (int i = 0; i < digits.length - 1; i++) {
+            if (Math.abs(digits[i] - digits[i + 1]) != 1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(this.number);
     }
 }
