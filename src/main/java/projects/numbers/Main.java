@@ -154,6 +154,12 @@ public class Main {
                         }
                     }
                     mutuallyExclusiveProperties = Number.findMutuallyExclusiveProperties(properties);
+                    var mutuallyExcludedProperties = Number.findMutuallyExclusiveProperties(excludedProperties);
+                    mutuallyExcludedProperties.forEach(propertyPair -> {
+                        propertyPair.set(0, "-" + propertyPair.get(0));
+                        propertyPair.set(1, "-" + propertyPair.get(1));
+                    });
+                    mutuallyExclusiveProperties.addAll(mutuallyExcludedProperties);
                     if (!wrongProperties.isEmpty() || !mutuallyExclusiveProperties.isEmpty()) {
                         numberInput = -2;
                     }
