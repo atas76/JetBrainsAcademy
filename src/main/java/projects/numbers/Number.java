@@ -17,7 +17,7 @@ public class Number {
         Map.entry("happy", "sad"), Map.entry("sad", "happy")
     );
 
-    int [] digits;
+    long [] digits;
 
     public Number(long number) {
         this(number, false);
@@ -148,18 +148,18 @@ public class Number {
         };
     }
 
-    int[] getDigits() {
+    long[] getDigits() {
 
-        List<Integer> digits = new ArrayList<>();
+        List<Long> digits = new ArrayList<>();
 
         long quotient = number;
 
         while (quotient > 0) {
-            digits.add( (int) quotient % 10);
+            digits.add(quotient % 10);
             quotient /= 10;
         }
 
-        return digits.stream().mapToInt(i -> i).toArray();
+        return digits.stream().mapToLong(i -> i).toArray();
     }
 
     private boolean isDuck() {
@@ -254,10 +254,10 @@ public class Number {
     }
 
     private long getSquaredDigitsSum(long number) {
-        int [] digits = new Number(number, true).getDigits();
+        long [] digits = new Number(number, true).getDigits();
         long squaredDigitsSum = 0;
         for (int i = 0; i < digits.length; i++) {
-            squaredDigitsSum += (long) digits[i] * digits[i];
+            squaredDigitsSum += digits[i] * digits[i];
         }
         return squaredDigitsSum;
     }
