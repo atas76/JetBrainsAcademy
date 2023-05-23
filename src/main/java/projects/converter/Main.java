@@ -37,7 +37,31 @@ public class Main {
             }
             if ("/to".equals(command)) {
 
+                int result = 0;
+
+                System.out.println("Enter source number: ");
+                String sourceNumber = scanner.next();
+
+                System.out.println("Enter source base:");
+                int sourceBase = scanner.nextInt();
+
+                if (sourceBase != 16) {
+                    for (int i = 0; i < sourceNumber.length(); i++) {
+                        result += (sourceNumber.charAt(i) - '0') * Math.pow(sourceBase, sourceNumber.length() - i - 1);
+                    }
+                } else {
+                    for (int i = 0; i < sourceNumber.length(); i++) {
+                        result += convertFromHex(sourceNumber.charAt(i)) *
+                                Math.pow(sourceBase, sourceNumber.length() - i - 1);
+                    }
+                }
+
+                System.out.println("Conversion to decimal result: " + result);
             }
         } while (!"/exit".equals(command));
+    }
+
+    private static int convertFromHex(char digit) {
+        return (digit >= 65) ? 10 + Character.toLowerCase(digit) - 'a' : digit - '0';
     }
 }
