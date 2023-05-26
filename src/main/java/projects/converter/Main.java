@@ -5,63 +5,63 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
+
         Scanner scanner = new Scanner(System.in);
 
+        System.out.println("Enter two numbers in format: {source base} {target base} (To quit type /exit)");
+        String input = scanner.next();
+        if ("/exit".equals(input)) {
+            System.exit(0);
+        }
+        int sourceBase = Integer.parseInt(input);
+        int targetBase = scanner.nextInt();
 
-        String command;
+         while (true) {
 
-        do {
+            System.out.println("Enter number in base " + sourceBase + " to convert to base " +
+                    targetBase + " (To go back type /back)");
+            String number = scanner.next();
+            if ("/exit".equals(number)) {
+                break;
+            }
 
-            System.out.println("Do you want to convert /from decimal or /to decimal? (To quit type /exit)");
-            command = scanner.next();
+            int result = 0;
 
-            if ("/from".equals(command)) {
-
-                StringBuilder result = new StringBuilder();
-
-                System.out.println("Enter number in decimal system: ");
-                int decimalNumber = scanner.nextInt();
-
-                System.out.println("Enter target base: ");
-                int targetBase = scanner.nextInt();
-
-                int quotient = decimalNumber;
-
-                while (quotient != 0) {
-                    result.append(Character.forDigit(quotient % targetBase, targetBase));
-                    quotient /= targetBase;
-                }
-
-                System.out.println("Conversion result: " + result.reverse());
+            if (sourceBase == 10) {
+                int decimalNumber = Integer.parseInt(number);
+                System.out.println("Conversion result: " + convertFromDec(targetBase, decimalNumber));
                 System.out.println();
-            }
-            if ("/to".equals(command)) {
-
-                int result = 0;
-
-                System.out.println("Enter source number: ");
-                String sourceNumber = scanner.next();
-
-                System.out.println("Enter source base:");
-                int sourceBase = scanner.nextInt();
-
-                if (sourceBase != 16) {
-                    for (int i = 0; i < sourceNumber.length(); i++) {
-                        result += (sourceNumber.charAt(i) - '0') * Math.pow(sourceBase, sourceNumber.length() - i - 1);
-                    }
-                } else {
-                    for (int i = 0; i < sourceNumber.length(); i++) {
-                        result += convertFromHex(sourceNumber.charAt(i)) *
-                                Math.pow(sourceBase, sourceNumber.length() - i - 1);
-                    }
+            } else if (sourceBase < 10) {
+                for (int i = 0; i < number.length(); i++) {
+                    result += (number.charAt(i) - '0') * Math.pow(sourceBase, number.length() - i - 1);
                 }
-
-                System.out.println("Conversion to decimal result: " + result);
+            } else {
+                for (int i = 0; i < number.length(); i++) {
+                    result += convertFromAlphabeticalDigit(number.charAt(i)) *
+                            Math.pow(sourceBase, number.length() - i - 1);
+                }
             }
-        } while (!"/exit".equals(command));
+            if (sourceBase != 10) {
+                if (targetBase == 10) {
+                    System.out.println("Conversion result: " + result);
+                    System.out.println();
+                } else {
+                    System.out.println("Conversion result: " + convertFromDec(targetBase, result));
+                }
+            }
+        }
     }
 
-    private static int convertFromHex(char digit) {
+    private static String convertFromDec(int targetBase, int decimalNumber) {
+        StringBuilder resultSb = new StringBuilder();
+        while (decimalNumber != 0) {
+            resultSb.append(Character.forDigit(decimalNumber % targetBase, targetBase));
+            decimalNumber /= targetBase;
+        }
+        return resultSb.reverse().toString();
+    }
+
+    private static int convertFromAlphabeticalDigit(char digit) {
         return (digit >= 65) ? 10 + Character.toLowerCase(digit) - 'a' : digit - '0';
     }
 }
