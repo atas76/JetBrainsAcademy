@@ -1,5 +1,6 @@
 package projects.converter;
 
+import java.math.BigInteger;
 import java.util.Scanner;
 
 public class Main {
@@ -28,7 +29,7 @@ public class Main {
             int result = 0;
 
             if (sourceBase == 10) {
-                int decimalNumber = Integer.parseInt(number);
+                BigInteger decimalNumber = new BigInteger(number);
                 System.out.println("Conversion result: " + convertFromDec(targetBase, decimalNumber));
                 System.out.println();
             } else if (sourceBase < 10) {
@@ -47,9 +48,21 @@ public class Main {
                     System.out.println();
                 } else {
                     System.out.println("Conversion result: " + convertFromDec(targetBase, result));
+                    System.out.println();
                 }
             }
         }
+    }
+
+    private static String convertFromDec(int targetBase, BigInteger decimalNumber) {
+        StringBuilder resultSb = new StringBuilder();
+        BigInteger targetBaseBigInt = BigInteger.valueOf(targetBase);
+        while (!decimalNumber.equals(BigInteger.ZERO)) {
+            resultSb.append(Character.forDigit(decimalNumber.mod(BigInteger.valueOf(targetBase)).intValue(),
+                    targetBase));
+            decimalNumber = decimalNumber.divide(targetBaseBigInt);
+        }
+        return resultSb.reverse().toString();
     }
 
     private static String convertFromDec(int targetBase, int decimalNumber) {
