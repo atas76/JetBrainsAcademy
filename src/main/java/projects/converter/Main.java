@@ -36,7 +36,7 @@ public class Main {
                 continue;
             }
 
-            int result = 0;
+            BigInteger result = BigInteger.ZERO;
 
             if (sourceBase == 10) {
                 BigInteger decimalNumber = new BigInteger(number);
@@ -44,12 +44,14 @@ public class Main {
                 System.out.println();
             } else if (sourceBase < 10) {
                 for (int i = 0; i < number.length(); i++) {
-                    result += (number.charAt(i) - '0') * Math.pow(sourceBase, number.length() - i - 1);
+                    double currentDigit = (number.charAt(i) - '0') * Math.pow(sourceBase, number.length() - i - 1);
+                    result = result.add(BigInteger.valueOf((long) currentDigit));
                 }
             } else {
                 for (int i = 0; i < number.length(); i++) {
-                    result += convertFromAlphabeticalDigit(number.charAt(i)) *
+                    double currentDigit = convertFromAlphabeticalDigit(number.charAt(i)) *
                             Math.pow(sourceBase, number.length() - i - 1);
+                    result = result.add(BigInteger.valueOf((long) currentDigit));
                 }
             }
             if (sourceBase != 10) {
@@ -71,15 +73,6 @@ public class Main {
             resultSb.append(Character.forDigit(decimalNumber.mod(BigInteger.valueOf(targetBase)).intValue(),
                     targetBase));
             decimalNumber = decimalNumber.divide(targetBaseBigInt);
-        }
-        return resultSb.reverse().toString();
-    }
-
-    private static String convertFromDec(int targetBase, int decimalNumber) {
-        StringBuilder resultSb = new StringBuilder();
-        while (decimalNumber != 0) {
-            resultSb.append(Character.forDigit(decimalNumber % targetBase, targetBase));
-            decimalNumber /= targetBase;
         }
         return resultSb.reverse().toString();
     }
