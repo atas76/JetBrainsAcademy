@@ -25,6 +25,16 @@ public class Main {
             if ("/exit".equals(number)) {
                 break;
             }
+            if ("/back".equals(number)) {
+                System.out.println("Enter two numbers in format: {source base} {target base} (To quit type /exit)");
+                input = scanner.next();
+                if ("/exit".equals(input)) {
+                    System.exit(0);
+                }
+                sourceBase = Integer.parseInt(input);
+                targetBase = scanner.nextInt();
+                continue;
+            }
 
             int result = 0;
 
