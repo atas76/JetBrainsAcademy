@@ -74,6 +74,7 @@ public class Main {
                     targetBase));
             decimalNumber = decimalNumber.divide(targetBaseBigInt);
         }
+        if (resultSb.isEmpty()) resultSb.append("0");
         return resultSb.reverse().toString();
     }
 
