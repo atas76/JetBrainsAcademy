@@ -101,7 +101,8 @@ public class Main {
                         fractionalPartStr = "00000";
                     }
                     System.out.println("Conversion result: " +
-                            convertFromDecIntegerPart(targetBase, result.toBigInteger()) + "." + fractionalPartStr);
+                            convertFromDecIntegerPart(targetBase, result.toBigInteger()) +
+                            (!fractionalPartStr.isEmpty() ? "." + fractionalPartStr : ""));
                     System.out.println();
                 }
             }
