@@ -72,7 +72,7 @@ public class Main {
                 }
                 for (int i = 0; i < fractionalPart.length(); i++) {
                     double currentDigit = (fractionalPart.charAt(i) - '0') / Math.pow(sourceBase, i + 1);
-                    result = result.add(BigDecimal.valueOf((long) currentDigit));
+                    result = result.add(BigDecimal.valueOf(currentDigit));
                 }
             } else {
                 for (int i = 0; i < integerPart.length(); i++) {
