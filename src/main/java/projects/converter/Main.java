@@ -85,6 +85,9 @@ public class Main {
                             Math.pow(sourceBase, i + 1);
                     result = result.add(BigDecimal.valueOf(currentDigit));
                 }
+                if (!fractionalPart.isEmpty()) {
+                    result = result.setScale(5, RoundingMode.HALF_UP);
+                }
             }
             if (sourceBase != 10) {
                 if (targetBase == 10) {
