@@ -73,7 +73,6 @@ public class Main {
                 for (int i = 0; i < fractionalPart.length(); i++) {
                     double currentDigit = (fractionalPart.charAt(i) - '0') / Math.pow(sourceBase, i + 1);
                     result = result.add(BigDecimal.valueOf((long) currentDigit));
-                    result = result.setScale(5, RoundingMode.HALF_UP);
                 }
             } else {
                 for (int i = 0; i < integerPart.length(); i++) {
@@ -85,11 +84,13 @@ public class Main {
                     double currentDigit = convertFromAlphabeticalDigit(fractionalPart.charAt(i)) /
                             Math.pow(sourceBase, i + 1);
                     result = result.add(BigDecimal.valueOf(currentDigit));
-                    result = result.setScale(5, RoundingMode.HALF_UP);
                 }
             }
             if (sourceBase != 10) {
                 if (targetBase == 10) {
+                    if (!fractionalPart.isEmpty()) {
+                        result = result.setScale(5, RoundingMode.HALF_UP);
+                    }
                     System.out.println("Conversion result: " + result);
                     System.out.println();
                 } else {
