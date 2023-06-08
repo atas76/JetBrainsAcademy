@@ -19,7 +19,7 @@ public class Main {
         int sourceBase = Integer.parseInt(input);
         int targetBase = scanner.nextInt();
 
-         while (true) {
+        while (true) {
 
             System.out.println("Enter number in base " + sourceBase + " to convert to base " +
                     targetBase + " (To go back type /back)");
@@ -35,6 +35,11 @@ public class Main {
                 }
                 sourceBase = Integer.parseInt(input);
                 targetBase = scanner.nextInt();
+                continue;
+            }
+
+            if (sourceBase == targetBase) {
+                System.out.println("Conversion result: " + numberInput);
                 continue;
             }
 
