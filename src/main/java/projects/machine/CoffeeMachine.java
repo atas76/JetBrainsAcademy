@@ -1,7 +1,31 @@
 package projects.machine;
 
+import java.util.Map;
+import java.util.Scanner;
+
+import static projects.machine.Ingredient.*;
+
 public class CoffeeMachine {
+
+    private static Map<Ingredient, Integer> ingredientQuantities;
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Write how many cups of coffee you will need:");
+        int cups = scanner.nextInt();
+        ingredientQuantities = IngredientCalculator.calculateIngredients(cups);
+        System.out.println("For " + cups + " of coffee you will need:");
+        displayIngredientQuantity(WATER);
+        displayIngredientQuantity(MILK);
+        displayIngredientQuantity(COFFEE);
+    }
+
+    private static void displayIngredientQuantity(Ingredient ingredient) {
+        System.out.println(ingredientQuantities.get(ingredient) +
+                " " + ingredient.getUnit() + " of " + ingredient.getLabel());
+    }
+
+    private static void makeCoffee() {
         begin();
         grind();
         boil();
