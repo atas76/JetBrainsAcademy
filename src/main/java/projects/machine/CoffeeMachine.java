@@ -1,28 +1,56 @@
 package projects.machine;
 
-import java.util.Map;
 import java.util.Scanner;
 
 import static projects.machine.Ingredient.*;
 
 public class CoffeeMachine {
+    private int mlWater;
+    private int mlMilk;
+    private int gCoffeeBeans;
 
-    private static Map<Ingredient, Integer> ingredientQuantities;
+    private int orderCups;
+
+    private int orderServings;
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
+        CoffeeMachine machine = new CoffeeMachine();
+
+        System.out.println("Write how many ml of water the coffee machine has:");
+        machine.mlWater = scanner.nextInt();
+
+        System.out.println("Write how many ml of milk the coffee machine has:");
+        machine.mlMilk = scanner.nextInt();
+
+        System.out.println("Write how many grams of coffee beans the coffee machine has:");
+        machine.gCoffeeBeans = scanner.nextInt();
+
         System.out.println("Write how many cups of coffee you will need:");
-        int cups = scanner.nextInt();
-        ingredientQuantities = IngredientCalculator.calculateIngredients(cups);
-        System.out.println("For " + cups + " of coffee you will need:");
-        displayIngredientQuantity(WATER);
-        displayIngredientQuantity(MILK);
-        displayIngredientQuantity(COFFEE);
+        machine.orderCups = scanner.nextInt();
+
+        machine.calculateServings();
+        machine.displayOrderMessage();
     }
 
-    private static void displayIngredientQuantity(Ingredient ingredient) {
-        System.out.println(ingredientQuantities.get(ingredient) +
-                " " + ingredient.getUnit() + " of " + ingredient.getLabel());
+    private void displayOrderMessage() {
+        if (orderCups == orderServings) {
+            System.out.println("Yes, I can make that amount of coffee");
+        } else if (orderCups < orderServings) {
+            System.out.printf("Yes, I can make that amount of coffee (and even %d more than that)%n",
+                    orderServings - orderCups);
+        } else {
+            System.out.printf("No, I can make only %d cup(s) of coffee%n", orderServings);
+        }
+    }
+
+    private void calculateServings() {
+        int waterServings = mlWater / WATER.getCupQuantity();
+        int milkServings = mlMilk / MILK.getCupQuantity();
+        int coffeeServings = gCoffeeBeans / COFFEE.getCupQuantity();
+
+        this.orderServings = Math.min(waterServings, Math.min(milkServings, coffeeServings));
     }
 
     private static void makeCoffee() {
