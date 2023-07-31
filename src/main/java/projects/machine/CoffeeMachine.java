@@ -2,92 +2,134 @@ package projects.machine;
 
 import java.util.Scanner;
 
-import static projects.machine.Ingredient.*;
-
 public class CoffeeMachine {
     private int mlWater;
     private int mlMilk;
     private int gCoffeeBeans;
 
-    private int orderCups;
+    private int cups;
 
-    private int orderServings;
+    private int money;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        CoffeeMachine machine = new CoffeeMachine();
+        CoffeeMachine coffeeMachine = new CoffeeMachine.Builder()
+                .mlWater(400)
+                .mlMilk(540)
+                .gCoffeeBeans(120)
+                .cups(9)
+                .money(550)
+                .build();
+        coffeeMachine.displayState();
 
-        System.out.println("Write how many ml of water the coffee machine has:");
-        machine.mlWater = scanner.nextInt();
+        System.out.println("Write action (buy, fill, take)");
+        String action = scanner.next();
 
-        System.out.println("Write how many ml of milk the coffee machine has:");
-        machine.mlMilk = scanner.nextInt();
-
-        System.out.println("Write how many grams of coffee beans the coffee machine has:");
-        machine.gCoffeeBeans = scanner.nextInt();
-
-        System.out.println("Write how many cups of coffee you will need:");
-        machine.orderCups = scanner.nextInt();
-
-        machine.calculateServings();
-        machine.displayOrderMessage();
+        switch(action) {
+            case "buy":
+                System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino:");
+                int coffeeSelection = scanner.nextInt();
+                coffeeMachine.processPurchase(coffeeSelection);
+                break;
+            case "fill":
+                System.out.println("Write how many ml of water you want to add:");
+                int mlWater = scanner.nextInt();
+                System.out.println("Write how many ml of milk you want to add:");
+                int mlMilk = scanner.nextInt();
+                System.out.println("Write how many grams of coffee beans you want to add:");
+                int gCoffeeBeans = scanner.nextInt();
+                System.out.println("Write how many disposable cups you want to add:");
+                int cups = scanner.nextInt();
+                coffeeMachine.updateStateAfterFilling(mlWater, mlMilk, gCoffeeBeans, cups);
+                break;
+            case "take":
+                coffeeMachine.takeMoney();
+                System.out.println("I gave you $550");
+                break;
+            default:
+                System.out.println("Unsupported");
+        }
+        coffeeMachine.displayState();
     }
 
-    private void displayOrderMessage() {
-        if (orderCups == orderServings) {
-            System.out.println("Yes, I can make that amount of coffee");
-        } else if (orderCups < orderServings) {
-            System.out.printf("Yes, I can make that amount of coffee (and even %d more than that)%n",
-                    orderServings - orderCups);
-        } else {
-            System.out.printf("No, I can make only %d cup(s) of coffee%n", orderServings);
+    public CoffeeMachine(Builder builder) {
+        this.mlWater = builder.mlWater;
+        this.mlMilk = builder.mlMilk;
+        this.gCoffeeBeans = builder.gCoffeeBeans;
+        this.cups = builder.cups;
+        this.money = builder.money;
+    }
+
+    public static class Builder {
+        private int mlWater;
+        private int mlMilk;
+        private int gCoffeeBeans;
+        private int cups;
+        private int money;
+
+        public Builder() {
+        }
+
+        public Builder mlWater(int mlWater) {
+            this.mlWater = mlWater;
+            return this;
+        }
+
+        public Builder mlMilk(int mlMilk) {
+            this.mlMilk = mlMilk;
+            return this;
+        }
+
+        public Builder gCoffeeBeans(int gCoffeeBeans) {
+            this.gCoffeeBeans = gCoffeeBeans;
+            return this;
+        }
+
+        public Builder cups(int cups) {
+            this.cups = cups;
+            return this;
+        }
+
+        public Builder money(int money) {
+            this.money = money;
+            return this;
+        }
+
+        public CoffeeMachine build() {
+            return new CoffeeMachine(this);
         }
     }
 
-    private void calculateServings() {
-        int waterServings = mlWater / WATER.getCupQuantity();
-        int milkServings = mlMilk / MILK.getCupQuantity();
-        int coffeeServings = gCoffeeBeans / COFFEE.getCupQuantity();
-
-        this.orderServings = Math.min(waterServings, Math.min(milkServings, coffeeServings));
+    public void displayState() {
+        System.out.println("The coffee machine has: ");
+        System.out.println(mlWater + " ml of water");
+        System.out.println(mlMilk + " ml of milk");
+        System.out.println(gCoffeeBeans + " g of coffee beans");
+        System.out.println(cups + " disposable cups");
+        System.out.println("$" + money + " of money");
     }
 
-    private static void makeCoffee() {
-        begin();
-        grind();
-        boil();
-        mix();
-        pourCoffee();
-        pourMilk();
-        end();
+    public void processPurchase(int coffeeSelection) {
+        updateStateAfterPurchase(Coffee.values()[coffeeSelection - 1]);
     }
 
-    public static void begin() {
-        System.out.println("Starting to make a coffee");
+    public void updateStateAfterFilling(int mlWater, int mlMilk, int gCoffeeBeans, int cups) {
+        this.mlWater += mlWater;
+        this.mlMilk += mlMilk;
+        this.gCoffeeBeans += gCoffeeBeans;
+        this.cups += cups;
     }
 
-    public static void grind() {
-        System.out.println("Grinding coffee beans");
+    public void takeMoney() {
+        this.money = 0;
     }
 
-    public static void boil() {
-        System.out.println("Boiling water");
-    }
-
-    public static void mix() {
-        System.out.println("Mixing boiled water with crushed coffee beans");
-    }
-
-    public static void pourCoffee() {
-        System.out.println("Pouring coffee into the cup");
-    }
-
-    public static void pourMilk() {
-        System.out.println("Pouring some milk into the cup");
-    }
-
-    public static void end() {
-        System.out.println("Coffee is ready!");
+    private void updateStateAfterPurchase(Coffee coffeeOrder) {
+        this.mlWater -= coffeeOrder.getMlWater();
+        this.gCoffeeBeans -= coffeeOrder.getGramsCoffeeBeans();
+        this.mlMilk -= coffeeOrder.getMlMilk();
+        this.cups--;
+        this.money += coffeeOrder.getCost();
     }
 }
