@@ -1,6 +1,6 @@
 package projects.machine;
 
-import java.util.Scanner;
+import java.util.*;
 
 public class CoffeeMachine {
     private int mlWater;
@@ -21,36 +21,44 @@ public class CoffeeMachine {
                 .cups(9)
                 .money(550)
                 .build();
-        coffeeMachine.displayState();
 
-        System.out.println("Write action (buy, fill, take)");
+        System.out.println("Write action (buy, fill, take, remaining, exit):");
         String action = scanner.next();
 
-        switch(action) {
-            case "buy":
-                System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino:");
-                int coffeeSelection = scanner.nextInt();
-                coffeeMachine.processPurchase(coffeeSelection);
-                break;
-            case "fill":
-                System.out.println("Write how many ml of water you want to add:");
-                int mlWater = scanner.nextInt();
-                System.out.println("Write how many ml of milk you want to add:");
-                int mlMilk = scanner.nextInt();
-                System.out.println("Write how many grams of coffee beans you want to add:");
-                int gCoffeeBeans = scanner.nextInt();
-                System.out.println("Write how many disposable cups you want to add:");
-                int cups = scanner.nextInt();
-                coffeeMachine.updateStateAfterFilling(mlWater, mlMilk, gCoffeeBeans, cups);
-                break;
-            case "take":
-                coffeeMachine.takeMoney();
-                System.out.println("I gave you $550");
-                break;
-            default:
-                System.out.println("Unsupported");
+        while (!"exit".equals(action)) {
+            switch (action) {
+                case "buy" -> {
+                    System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino:");
+                    int coffeeSelection = scanner.nextInt();
+                    List<String> missingResources = coffeeMachine.processOrder(coffeeSelection);
+                    if (missingResources.isEmpty()) {
+                        System.out.println("I have enough resources, making you a coffee!");
+                    } else {
+                        missingResources.forEach(resource -> System.out.println("Sorry, not enough " + resource + "!"));
+                    }
+                }
+                case "fill" -> {
+                    System.out.println("Write how many ml of water you want to add:");
+                    int mlWater = scanner.nextInt();
+                    System.out.println("Write how many ml of milk you want to add:");
+                    int mlMilk = scanner.nextInt();
+                    System.out.println("Write how many grams of coffee beans you want to add:");
+                    int gCoffeeBeans = scanner.nextInt();
+                    System.out.println("Write how many disposable cups you want to add:");
+                    int cups = scanner.nextInt();
+                    coffeeMachine.updateStateAfterFilling(mlWater, mlMilk, gCoffeeBeans, cups);
+                }
+                case "take" -> {
+                    int moneyReceived = coffeeMachine.takeMoney();
+                    System.out.println("I gave you $" + moneyReceived);
+                }
+                case "remaining" -> coffeeMachine.displayState();
+                default -> System.out.println("Unsupported");
+            }
+            System.out.println();
+            System.out.println("Write action (buy, fill, take, remaining, exit):");
+            action = scanner.next();
         }
-        coffeeMachine.displayState();
     }
 
     public CoffeeMachine(Builder builder) {
@@ -110,8 +118,35 @@ public class CoffeeMachine {
         System.out.println("$" + money + " of money");
     }
 
-    public void processPurchase(int coffeeSelection) {
-        updateStateAfterPurchase(Coffee.values()[coffeeSelection - 1]);
+    public List<String> processOrder(int coffeeSelection) {
+        Coffee order = Coffee.values()[coffeeSelection - 1];
+        List<String> missingResources = checkResources(order);
+        if (missingResources.isEmpty()) {
+            updateState(order);
+        }
+        return missingResources;
+    }
+
+    private void updateState(Coffee order) {
+        this.mlWater -= order.getMlWater();
+        this.gCoffeeBeans -= order.getGramsCoffeeBeans();
+        this.mlMilk -= order.getMlMilk();
+        this.cups--;
+        this.money += order.getCost();
+    }
+
+    private List<String> checkResources(Coffee order) {
+        List<String> retVal = new ArrayList<>();
+        if (order.getMlMilk() > this.mlMilk) {
+            retVal.add("milk");
+        }
+        if (order.getGramsCoffeeBeans() > this.gCoffeeBeans) {
+            retVal.add("coffee beans");
+        }
+        if (order.getMlWater() > this.mlWater) {
+            retVal.add("water");
+        }
+        return retVal;
     }
 
     public void updateStateAfterFilling(int mlWater, int mlMilk, int gCoffeeBeans, int cups) {
@@ -121,15 +156,9 @@ public class CoffeeMachine {
         this.cups += cups;
     }
 
-    public void takeMoney() {
+    public int takeMoney() {
+        int moneyBack = this.money;
         this.money = 0;
-    }
-
-    private void updateStateAfterPurchase(Coffee coffeeOrder) {
-        this.mlWater -= coffeeOrder.getMlWater();
-        this.gCoffeeBeans -= coffeeOrder.getGramsCoffeeBeans();
-        this.mlMilk -= coffeeOrder.getMlMilk();
-        this.cups--;
-        this.money += coffeeOrder.getCost();
+        return moneyBack;
     }
 }
