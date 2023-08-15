@@ -29,12 +29,20 @@ public class CoffeeMachine {
             switch (action) {
                 case "buy" -> {
                     System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino:");
-                    int coffeeSelection = scanner.nextInt();
-                    List<String> missingResources = coffeeMachine.processOrder(coffeeSelection);
-                    if (missingResources.isEmpty()) {
-                        System.out.println("I have enough resources, making you a coffee!");
+                    if (scanner.hasNextInt()) {
+                        int coffeeSelection = scanner.nextInt();
+                        List<String> missingResources = coffeeMachine.processOrder(coffeeSelection);
+                        if (missingResources.isEmpty()) {
+                            System.out.println("I have enough resources, making you a coffee!");
+                        } else {
+                            missingResources.forEach(resource -> System.out.println("Sorry, not enough " + resource + "!"));
+                        }
                     } else {
-                        missingResources.forEach(resource -> System.out.println("Sorry, not enough " + resource + "!"));
+                        String menuOption = scanner.next();
+                        if (!"back".equals(menuOption)) {
+                            System.out.println("I have to say that this option is unsupported although it doesn't make any difference");
+                            System.out.println("Just write 'back' next time if you don't want this message to appear again");
+                        }
                     }
                 }
                 case "fill" -> {
