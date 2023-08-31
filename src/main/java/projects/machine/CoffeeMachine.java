@@ -155,7 +155,7 @@ public class CoffeeMachine {
         }
     }
 
-    public void displayState() {
+    private void displayState() {
         System.out.println("The coffee machine has: ");
         System.out.println(mlWater + " ml of water");
         System.out.println(mlMilk + " ml of milk");
@@ -164,7 +164,7 @@ public class CoffeeMachine {
         System.out.println("$" + money + " of money");
     }
 
-    public List<String> processOrder(int coffeeSelection) {
+    private List<String> processOrder(int coffeeSelection) {
         Coffee order = Coffee.values()[coffeeSelection - 1];
         List<String> missingResources = checkResources(order);
         if (missingResources.isEmpty()) {
@@ -195,14 +195,7 @@ public class CoffeeMachine {
         return retVal;
     }
 
-    public void updateStateAfterFilling(int mlWater, int mlMilk, int gCoffeeBeans, int cups) {
-        this.mlWater += mlWater;
-        this.mlMilk += mlMilk;
-        this.gCoffeeBeans += gCoffeeBeans;
-        this.cups += cups;
-    }
-
-    public int takeMoney() {
+    private int takeMoney() {
         int moneyBack = this.money;
         this.money = 0;
         return moneyBack;
