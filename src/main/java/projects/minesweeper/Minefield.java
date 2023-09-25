@@ -4,14 +4,13 @@ import java.util.Random;
 
 public class Minefield {
 
-    private static Random rnd = new Random();
-    private boolean [][] minefield = new boolean[X_SIZE][Y_SIZE];
-    private static int NUMBER_OF_MINES = 10;
-    private static int X_SIZE = 9;
-    private static int Y_SIZE = 9;
+    private static final Random rnd = new Random();
+    private final boolean [][] minefield = new boolean[X_SIZE][Y_SIZE];
+    private static final int X_SIZE = 9;
+    private static final int Y_SIZE = 9;
 
-    public Minefield() {
-        layMines();
+    public Minefield(int minesNum) {
+        layMines(minesNum);
     }
 
     public void display() {
@@ -23,10 +22,10 @@ public class Minefield {
         }
     }
 
-    private void layMines() {
+    private void layMines(int minesNum) {
         int counter = 0;
 
-        while (counter < NUMBER_OF_MINES) {
+        while (counter < minesNum) {
             int x = rnd.nextInt(X_SIZE);
             int y = rnd.nextInt(Y_SIZE);
             if (!minefield[x][y]) {
