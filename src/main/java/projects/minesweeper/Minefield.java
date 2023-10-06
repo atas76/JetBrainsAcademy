@@ -16,10 +16,26 @@ public class Minefield {
     public void display() {
         for (int i = 0; i < X_SIZE; i++) {
             for (int j = 0; j < Y_SIZE; j++) {
-                System.out.print(minefield[i][j] ? "X" : ".");
+                System.out.print(minefield[i][j] ? "X" : getEmptyCellRepresentation(getNumberOfAdjacentMines(i, j)));
             }
             System.out.println();
         }
+    }
+
+    private int getNumberOfAdjacentMines(int x, int y) {
+        int minesNumber = 0;
+        for (int i = x - 1; i <= x + 1; i++) {
+            for (int j = y - 1; j <= y + 1; j++) {
+                if (i >= 0 && i < X_SIZE && j >= 0 && j < Y_SIZE) {
+                    if (minefield[i][j]) ++minesNumber;
+                }
+            }
+        }
+        return minesNumber;
+    }
+
+    private String getEmptyCellRepresentation(int adjacentMinesNumber) {
+        return (adjacentMinesNumber > 0) ? String.valueOf(adjacentMinesNumber) : ".";
     }
 
     private void layMines(int minesNum) {
